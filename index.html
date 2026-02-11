@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大阪京都 6日旅遊攻略</title>
+    <style>
+        :root {
+            --primary-color: #B85042;
+            --secondary-color: #A7BEAE;
+            --bg-color: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #9d4437 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Day Cards */
+        .day-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .day-header {
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Activity Cards */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .activity-card {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .activity-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .icon { font-size: 1.5em; margin-bottom: 10px; }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit { background: var(--secondary-color); color: white; margin-right: 5px; }
+        .btn-nav { 
+            background: #28a745; 
+            color: white; 
+            width: 100%; 
+            text-align: center; 
+            margin-top: 10px;
+        }
+        .btn-login { background: #6c757d; color: white; }
+        .btn-danger { background: #e74c3c; color: white; font-size: 12px; padding: 3px 8px; }
+
+        /* Admin UI */
+        .admin-controls { display: none; margin-top: 10px; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+            width: 90%; max-width: 400px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        
+        @media print { .btn, .status-bar, .admin-controls { display: none !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🗾 大阪京都 6日旅遊攻略</h1>
+        <p>2026.05.14 - 05.19</p>
+    </div>
+
+    <div class="status-bar">
+        <div id="auth-info">🔒 模式：僅供檢視</div>
+        <div>
+            <button class="btn btn-edit" onclick="exportData()">💾 備份</button>
+            <button class="btn btn-login" id="loginBtn" onclick="login()">🔐 管理登入</button>
+        </div>
+    </div>
+
+    <div id="itinerary"></div>
+</div>
+
+<div id="editModal" class="modal">
+    <h3 id="modalTitle">編輯內容</h3>
+    <div id="modalBody"></div>
+    <div style="text-align: right; margin-top: 20px;">
+        <button class="btn btn-login" onclick="closeModal()">取消</button>
+    </div>
+</div>
+
+<script>
+// --- 設定區域 ---
+const ADMIN_PASS = "05140519"; // 這是你的管理密碼
+let isAdmin = false;
+
+// --- 初始行程資料 ---
+let tripData = {
+    days: [
+        {
+            day: 1, date: "05/14 (三)", title: "抵達京都",
+            activities: [
+                { icon: "✈️", name: "關西國際機場", desc: "11:10 抵達" },
+                { icon: "🏨", name: "京都八條都酒店", desc: "辦理入住" }
+            ]
+        },
+        {
+            day: 2, date: "05/15 (四)", title: "京都巡禮",
+            activities: [
+                { icon: "⛩️", name: "清水寺", desc: "和服體驗" }
+            ]
+        }
+    ]
+};
+
+// --- 功能函數 ---
+function login() {
+    const p = prompt("請輸入管理密碼：");
+    if (p === ADMIN_PASS) {
+        isAdmin = true;
+        document.getElementById('auth-info').innerText = "🔓 模式：管理員編輯中";
+        document.getElementById('loginBtn').style.display = "none";
+        render();
+    } else {
+        alert("密碼錯誤！");
+    }
+}
+
+function render() {
+    const container = document.getElementById('itinerary');
+    container.innerHTML = tripData.days.map((day, dIdx) => `
+        <div class="day-section">
+            <div class="day-header">
+                <h2>Day ${day.day} - ${day.date} ${day.title}</h2>
+                ${isAdmin ? `<button class="btn btn-edit" onclick="editDay(${dIdx})">✏️</button>` : ''}
+            </div>
+            <div class="activities-grid">
+                ${day.activities.map((act, aIdx) => `
+                    <div class="activity-card">
+                        ${isAdmin ? `<button class="btn btn-danger" style="float:right" onclick="delAct(${dIdx}, ${aIdx})">刪除</button>` : ''}
+                        <div class="icon">${act.icon}</div>
+                        <h4>${act.name}</h4>
+                        <p>${act.desc}</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.name)}" target="_blank" class="btn btn-nav">📍 開啟導覽</a>
+                    </div>
+                `).join('')}
+            </div>
+            ${isAdmin ? `<button class="btn btn-edit" style="margin-top:15px;" onclick="addAct(${dIdx})">+ 新增活動</button>` : ''}
+        </div>
+    `).join('');
+}
+
+function editDay(idx) {
+    const d = tripData.days[idx];
+    showModal("編輯標題", `
+        <div class="form-group"><label>標題</label><input type="text" id="inT" value="${d.title}"></div>
+        <button class="btn btn-edit" onclick="saveDay(${idx})">儲存</button>
+    `);
+}
+
+function saveDay(idx) {
+    tripData.days[idx].title = document.getElementById('inT').value;
+    closeModal(); render();
+}
+
+function addAct(idx) {
+    showModal("新增活動", `
+        <div class="form-group"><label>圖示</label><input type="text" id="inI" placeholder="🍣"></div>
+        <div class="form-group"><label>名稱</label><input type="text" id="inN"></div>
+        <div class="form-group"><label>描述</label><input type="text" id="inD"></div>
+        <button class="btn btn-edit" onclick="saveAct(${idx})">新增</button>
+    `);
+}
+
+function saveAct(idx) {
+    const n = document.getElementById('inN').value;
+    if(!n) return;
+    tripData.days[idx].activities.push({
+        icon: document.getElementById('inI').value || "📍",
+        name: n, desc: document.getElementById('inD').value
+    });
+    closeModal(); render();
+}
+
+function delAct(dIdx, aIdx) { if(confirm("確定刪除？")) { tripData.days[dIdx].activities.splice(aIdx,1); render(); } }
+
+function showModal(title, html) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalBody').innerHTML = html;
+    document.getElementById('editModal').style.display = "block";
+}
+
+function closeModal() { document.getElementById('editModal').style.display = "none"; }
+
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tripData));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "trip_backup.json");
+    downloadAnchorNode.click();
+}
+
+// 初始執行
+render();
+</script>
+</body>
+</html>
