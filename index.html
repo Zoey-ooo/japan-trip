@@ -3,138 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 家族旅遊手冊</title>
+    <title>2026 家族旅遊・極致手帳版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --jp-red: #B85042; --jp-beige: #F9F8F6; --jp-green: #76885B; }
-        body { background-color: var(--jp-beige); font-family: -apple-system, sans-serif; }
-        .rounded-handbook { border-radius: 2rem; }
+        :root { --jp-red: #B85042; --jp-beige: #F9F8F6; }
+        body { background-color: var(--jp-beige); font-family: sans-serif; overflow-x: hidden; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .timeline-line::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: #e5e7eb; border-radius: 1px; }
+        .boarding-pass-cut { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 70%, 10px 65%, 10px 35%, 0 30%); }
     </style>
 </head>
 <body class="pb-24">
 
-    <div class="bg-[#B85042] text-white p-8 rounded-b-[3rem] shadow-lg text-center">
-        <h1 class="text-2xl font-bold italic">Family Trip in Japan</h1>
-        <p class="mt-2 text-sm opacity-90">2026.05.14 - 05.19 (6天5夜)</p>
+<div class="max-w-md mx-auto">
+    <div class="bg-[#B85042] text-white p-6 rounded-b-[2.5rem] shadow-lg relative overflow-hidden">
+        <div class="relative z-10 text-center">
+            <h1 class="text-xl font-bold opacity-80 uppercase tracking-widest italic">Japan Trip 2026</h1>
+            <div class="mt-4 flex justify-center gap-2 items-baseline">
+                <span class="text-4xl font-black" id="countdown-days">--</span>
+                <span class="text-sm font-bold">DAYS TO GO</span>
+            </div>
+            <p class="text-[10px] mt-2 opacity-60">2026.05.14 - 05.19</p>
+        </div>
+        <i class="fa-solid fa-plane absolute -right-4 -bottom-4 text-9xl opacity-10"></i>
     </div>
 
-    <div class="flex px-6 mt-6 gap-2">
-        <button id="btn-itinerary" onclick="openTab('itinerary')" class="flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all bg-[#B85042] text-white">🗓️ 詳細行程</button>
-        <button id="btn-notes" onclick="openTab('notes')" class="flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all bg-white text-slate-400">⚠️ 注意事項</button>
+    <div class="flex gap-3 overflow-x-auto p-4 no-scrollbar mt-2" id="date-picker"></div>
+
+    <div class="flex px-4 gap-2 mb-4">
+        <button onclick="openTab('itinerary', this)" class="tab-btn active flex-1 py-3 rounded-2xl bg-[#B85042] text-white font-bold shadow-md transition-all">🗓️ 行程</button>
+        <button onclick="openTab('bookings', this)" class="tab-btn flex-1 py-3 rounded-2xl bg-white text-slate-400 font-bold shadow-sm transition-all">🎫 預訂</button>
+        <button onclick="openTab('notes', this)" class="tab-btn flex-1 py-3 rounded-2xl bg-white text-slate-400 font-bold shadow-sm transition-all">⚠️ 注意</button>
     </div>
 
-    <div id="itinerary" class="tab-content active p-6 space-y-6">
-        
-        <div class="bg-white p-6 rounded-handbook shadow-md border border-red-50 mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <div class="text-center">
-                    <p class="text-3xl font-black text-slate-800">KHH</p>
-                    <p class="text-[10px] text-slate-400 font-bold">高雄 (07:05)</p>
-                </div>
-                <div class="flex-1 px-4 flex flex-col items-center">
-                    <i class="fa-solid fa-plane text-[#B85042]"></i>
-                    <div class="w-full border-t border-dashed border-gray-200 mt-2"></div>
-                </div>
-                <div class="text-center">
-                    <p class="text-3xl font-black text-slate-800">KIX</p>
-                    <p class="text-[10px] text-slate-400 font-bold">大阪 (11:10)</p>
+    <div id="itinerary" class="tab-content active px-4">
+        <div id="weather-card" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mb-4 flex justify-between items-center transition-all"></div>
+        <div id="timeline-container" class="space-y-4 relative"></div>
+    </div>
+
+    <div id="bookings" class="tab-content px-4 space-y-4">
+        <div class="bg-white rounded-3xl shadow-lg border-t-8 border-[#B85042] overflow-hidden boarding-pass-cut relative">
+            <div class="p-5">
+                <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 mb-4"><span>EVA AIRWAY</span><span>BR 182 / ECONOMY</span></div>
+                <div class="flex justify-between items-center">
+                    <div class="text-center"><h2 class="text-3xl font-black">KHH</h2><p class="text-[10px] text-slate-400">07:05 AM</p></div>
+                    <div class="flex-1 px-4 flex flex-col items-center"><i class="fa-solid fa-plane text-[#B85042] text-lg"></i><div class="w-full border-t-2 border-dashed border-slate-100 my-2"></div></div>
+                    <div class="text-center"><h2 class="text-3xl font-black text-KIX">KIX</h2><p class="text-[10px] text-slate-400">11:10 AM</p></div>
                 </div>
             </div>
-            <div class="flex justify-between text-[10px] font-bold text-slate-400">
-                <span>EVA AIR BR 182</span>
-                <span>TERMINAL 1</span>
+            <div class="bg-[#B85042]/5 p-4 flex justify-between text-xs border-t border-dashed border-slate-200">
+                <div><p class="text-slate-400">Date</p><p class="font-bold">14 MAY</p></div>
+                <div><p class="text-slate-400">Terminal</p><p class="font-bold">1</p></div>
+                <button onclick="checkPin()" class="bg-[#B85042] text-white px-3 py-1 rounded-full text-[10px]">電子憑證</button>
             </div>
         </div>
 
-        <div id="itinerary-list" class="space-y-8"></div>
-    </div>
-
-    <div id="notes" class="tab-content p-6 space-y-4">
-        <div class="bg-white p-6 rounded-handbook shadow-md">
-            <h3 class="text-[#B85042] font-bold mb-4 border-b pb-2"><i class="fa-solid fa-suitcase-rolling mr-2"></i>行李與登機規定</h3>
-            <ul class="text-sm space-y-3 text-slate-600">
-                <li><span class="bg-orange-100 text-orange-600 px-2 py-0.5 rounded mr-2">隨身</span>行動電源、相機電池、打火機(1個)必須隨身。</li>
-                <li><span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded mr-2">託運</span>腳架、自拍棒(收合>60cm)、液體(>100ml)須託運。</li>
-                <li><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded mr-2">重量</span>長榮託運通常為 23kg，請注意回程重量。</li>
-            </ul>
-        </div>
-        <div class="bg-white p-6 rounded-handbook shadow-md">
-            <h3 class="text-[#B85042] font-bold mb-4 border-b pb-2"><i class="fa-solid fa-train-subway mr-2"></i>日本交通禮儀</h3>
-            <ul class="text-sm space-y-3 text-slate-600">
-                <li>🚂 電車內請將手機轉靜音，避免大聲通話。</li>
-                <li>🚶 靠邊行走，電扶梯依地區（大阪靠右，京都靠左/隨流）。</li>
-                <li>💳 下車前確保 ICOCA 餘額充足。</li>
-            </ul>
-        </div>
-    </div>
-
-    <script>
-        // 核心行程資料
-        const tripData = [
-            { dayText: "第一天", date: "05/14(三)", title: "抵達京都", activities: [
-                { name: "關西機場 (T1) > 京都車站", desc: "搭乘 HARUKA 特急 (約 80 分鐘)", map: "https://maps.app.goo.gl/uXp9GfR6uG6u55n99" },
-                { name: "京都八條都酒店", desc: "🏨 Check-in / 祇園、四條河原町散策", map: "https://maps.app.goo.gl/TpxTfF6P5P5P5P5P5" }
-            ]},
-            { dayText: "第二天", date: "05/15(四)", title: "京都巡禮", activities: [
-                { name: "璃光和服 清水寺店", desc: "👘 預約和服體驗", map: "" },
-                { name: "清水寺 > 錦市場 > 金閣寺", desc: "⛩️ 體驗日本傳統建築與美食之旅", map: "" },
-                { name: "艾思利德酒店 難波南III", desc: "🏨 移動至大阪入住", map: "" }
-            ]},
-            { dayText: "第三天", date: "05/16(五)", title: "海之京都", activities: [
-                { name: "KKDay 一日遊行程", desc: "🚤 伊根灣遊船 > 天橋立 > 美山茅草屋", map: "" },
-                { name: "心齋橋 > 道頓堀", desc: "🛍️ 晚餐：一蘭拉麵、章魚燒、藥妝採買", map: "" }
-            ]},
-            { dayText: "第四天", date: "05/17(六)", title: "大阪下町", activities: [
-                { name: "黑門市場 > 天神橋筋", desc: "🍱 早午餐：和牛、海鮮串燒", map: "" },
-                { name: "通天閣 > 新世界", desc: "🗼 必看：巨大的河豚與比利肯像", map: "" }
-            ]},
-            { dayText: "第五天", date: "05/18(日)", title: "神戶包車", activities: [
-                { name: "神戶動物王國 > 南京町", desc: "🦥 水豚、小貓熊與中華街美食", map: "" },
-                { name: "神戶觀光船 > 臨海樂園 umie", desc: "🎡 眺望神戶港絕美夜景", map: "" }
-            ]},
-            { dayText: "第六天", date: "05/19(一)", title: "購物回程", activities: [
-                { name: "難波八阪神社", desc: "👹 巨大獅子頭舞台，祈求學業與健康", map: "" },
-                { name: "臨空城 Outlet > 關西機場", desc: "✈️ 最後採購、搭機 BR 147 (20:35)", map: "" }
-            ]}
-        ];
-
-        // 頁面切換邏輯
-        function openTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            
-            const isItinerary = tabId === 'itinerary';
-            document.getElementById('btn-itinerary').className = `flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all ${isItinerary ? 'bg-[#B85042] text-white' : 'bg-white text-slate-400'}`;
-            document.getElementById('btn-notes').className = `flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all ${!isItinerary ? 'bg-[#B85042] text-white' : 'bg-white text-slate-400'}`;
-        }
-
-        // 渲染行程列表
-        function renderItinerary() {
-            const container = document.getElementById('itinerary-list');
-            container.innerHTML = tripData.map(day => `
-                <div class="bg-white p-6 rounded-handbook shadow-sm border border-gray-100">
-                    <h3 class="text-[#B85042] font-bold text-lg mb-4 underline decoration-wavy decoration-[#E7E8D1] italic">
-                        ${day.dayText} ${day.date}
-                    </h3>
-                    <ul class="space-y-6 border-l-2 border-[#E7E8D1] ml-2 pl-6 relative">
-                        ${day.activities.map(act => `
-                            <li class="relative">
-                                <div class="absolute -left-[1.85rem] top-1.5 w-3 h-3 rounded-full bg-[#B85042]"></div>
-                                <p class="font-bold text-slate-800">${act.name}</p>
-                                <p class="text-xs text-slate-400 mt-1 italic">${act.desc}</p>
-                                ${act.map ? `<a href="${act.map}" target="_blank" class="inline-block mt-2 text-[10px] bg-slate-50 border border-slate-200 px-3 py-1 rounded-full text-[#B85042]"><i class="fa-solid fa-location-dot mr-1"></i>查看地圖</a>` : ''}
-                            </li>
-                        `).join('')}
-                    </ul>
+        <div class="bg-white rounded-3xl shadow-md p-5 border border-slate-100">
+            <h3 class="font-bold text-slate-800 mb-3"><i class="fa-solid fa-hotel mr-2 text-indigo-400"></i>住宿清單</h3>
+            <div class="space-y-4 text-sm">
+                <div class="border-l-4 border-indigo-400 pl-3">
+                    <p class="font-bold">京都八條都酒店 (Day 1)</p>
+                    <p class="text-xs text-slate-400">京都市南区西九条院町17</p>
                 </div>
-            `).join('');
-        }
+                <div class="border-l-4 border-indigo-400 pl-3">
+                    <p class="font-bold">艾思利德酒店 難波南III (Day 2-5)</p>
+                    <p class="text-xs text-slate-400">大阪府大阪市西成区</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        window.onload = renderItinerary;
-    </script>
+    <div id="notes" class="tab-content px-4">
+        <div class="bg-white p-6 rounded-3xl shadow-md space-y-4">
+            <h3 class="font-bold text-[#B85042] border-b pb-2 text-center">準備清單</h3>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="bg-slate-50 p-3 rounded-2xl"><p class="font-bold mb-1">護照證件</p>✔ 實體護照<br>✔ VJW QR Code</div>
+                <div class="bg-slate-50 p-3 rounded-2xl"><p class="font-bold mb-1">電子通訊</p>✔ 網卡/Wifi機<br>✔ 行動電源</div>
+                <div class="bg-slate-50 p-3 rounded-2xl"><p class="font-bold mb-1">日幣現金</p>✔ 建議每人準備<br> 5萬日幣現金</div>
+                <div class="bg-slate-50 p-3 rounded-2xl"><p class="font-bold mb-1">衣物藥品</p>✔ 萬用藥、雨具<br>✔ 薄外套</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tripStartDate = new Date('2026-05-14');
+    const typeColors = { transport: 'bg-blue-400', spot: 'bg-orange-400', hotel: 'bg-indigo-400', food: 'bg-pink-400' };
+
+    const tripData = [
+        { day: "D1", date: "05/14", week: "三", weather: "☀️ 晴天 22°C", activities: [
+            { time: "07:05", name: "小港機場起飛", type: "transport", desc: "長榮航空 BR 182", map: "" },
+            { time: "11:10", name: "關西機場抵達", type: "transport", desc: "換取 HARUKA 前往京都", map: "" },
+            { time: "15:00", name: "京都八條都酒店", type: "hotel", desc: "Check-in 放置行李", map: "https://goo.gl/maps/example" },
+            { time: "17:00", name: "祇園/四條河原町", type: "spot", desc: "散策、晚餐", map: "" }
+        ]},
+        { day: "D2", date: "05/15", week: "四", weather: "☁️ 多雲 20°C", activities: [
+            { time: "09:00", name: "璃光和服體驗", type: "spot", desc: "清水寺店預約", map: "" },
+            { time: "10:30", name: "清水寺/二年坂", desc: "熱門景點拍攝", type: "spot", map: "" },
+            { time: "13:00", name: "錦市場", type: "food", desc: "京都人的廚房", map: "" },
+            { time: "16:00", name: "金閣寺", type: "spot", desc: "欣賞舍利殿", map: "" },
+            { time: "19:00", name: "艾思利德酒店", type: "hotel", desc: "抵達大阪難波南", map: "" }
+        ]},
+        { day: "D3", date: "05/16", week: "五", weather: "☀️ 晴天 21°C", activities: [
+            { time: "08:30", name: "一日遊巴士集合", type: "transport", desc: "KKDay 海之京都專案", map: "" },
+            { time: "10:30", name: "伊根灣遊船", type: "spot", desc: "餵海鷗、看舟屋", map: "" },
+            { time: "13:00", name: "天橋立纜車", type: "spot", desc: "日本三景之一", map: "" },
+            { time: "15:30", name: "美山茅草屋", type: "spot", desc: "合掌村風格小村落", map: "" },
+            { time: "19:00", name: "心齋橋/道頓堀", type: "food", desc: "晚餐及購物", map: "" }
+        ]},
+        { day: "D4", date: "05/17", week: "六", weather: "🌧️ 小雨 18°C", activities: [
+            { time: "10:00", name: "黑門市場", type: "food", desc: "海鮮、和牛早午餐", map: "" },
+            { time: "13:00", name: "天神橋筋商店街", type: "spot", desc: "日本最長商店街", map: "" },
+            { time: "16:00", name: "通天閣", type: "spot", desc: "大阪經典地標", map: "" },
+            { time: "18:00", name: "新世界本通", type: "food", desc: "串炸晚餐", map: "" }
+        ]},
+        { day: "D5", date: "05/18", week: "日", weather: "☀️ 晴天 23°C", activities: [
+            { time: "09:00", name: "神戶包車出發", type: "transport", desc: "家族專屬接送", map: "" },
+            { time: "10:30", name: "神戶動物王國", type: "spot", desc: "近距離看水豚", map: "" },
+            { time: "13:30", name: "南京町(中華街)", type: "food", desc: "神戶午餐", map: "" },
+            { time: "15:30", name: "神戶觀光船", type: "spot", desc: "出海飽覽港灣景觀", map: "" },
+            { time: "17:30", name: "臨海樂園 umie", type: "spot", desc: "神戶港夜景", map: "" }
+        ]},
+        { day: "D6", date: "05/19", week: "一", weather: "☁️ 多雲 22°C", activities: [
+            { time: "09:30", name: "難波八阪神社", type: "spot", desc: "巨大獅子頭祈福", map: "" },
+            { time: "11:30", name: "臨空城 Outlet", type: "food", desc: "午餐及最後採購", map: "" },
+            { time: "17:30", name: "關西機場 (KIX)", type: "transport", desc: "辦理登機與免稅店", map: "" },
+            { time: "20:35", name: "起飛回國", type: "transport", desc: "BR 147 班機", map: "" }
+        ]}
+    ];
+
+    function updateCountdown() {
+        const diff = tripStartDate - new Date();
+        document.getElementById('countdown-days').innerText = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    }
+
+    function renderDatePicker() {
+        document.getElementById('date-picker').innerHTML = tripData.map((d, i) => `
+            <button onclick="changeDay(${i})" class="date-btn flex-shrink-0 w-16 py-3 rounded-2xl flex flex-col items-center transition-all ${i===0 ? 'bg-[#B85042] text-white shadow-md' : 'bg-white text-slate-400'}">
+                <span class="text-[10px] uppercase font-bold">${d.day}</span>
+                <span class="text-sm font-black">${d.date.split('/')[1]}</span>
+                <span class="text-[10px]">(${d.week})</span>
+            </button>
+        `).join('');
+    }
+
+    function changeDay(index) {
+        document.querySelectorAll('.date-btn').forEach((btn, i) => {
+            btn.classList.toggle('bg-[#B85042]', i === index);
+            btn.classList.toggle('text-white', i === index);
+            btn.classList.toggle('bg-white', i !== index);
+            btn.classList.toggle('text-slate-400', i !== index);
+        });
+
+        const dayData = tripData[index];
+        document.getElementById('weather-card').innerHTML = `
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">${dayData.weather.split(' ')[0]}</span>
+                <div><p class="text-sm font-bold text-slate-800">${dayData.weather.split(' ')[1]}</p><p class="text-[10px] text-slate-400">${dayData.weather.split(' ')[2]}</p></div>
+            </div>
+            <p class="text-[10px] font-bold text-jp-red italic">建議穿搭：薄外套</p>
+        `;
+
+        document.getElementById('timeline-container').innerHTML = dayData.activities.map(act => `
+            <div class="relative pl-8 timeline-line">
+                <div class="absolute left-0 top-1 w-4 h-4 rounded-full border-4 border-white ${typeColors[act.type]} z-10"></div>
+                <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-50">
+                    <div class="flex justify-between items-start mb-1"><span class="text-[10px] font-mono text-slate-400 font-bold">${act.time}</span><span class="text-[8px] px-2 py-0.5 rounded-full text-white uppercase ${typeColors[act.type]}">${act.type}</span></div>
+                    <h4 class="font-bold text-slate-800 text-sm">${act.name}</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">${act.desc}</p>
+                    ${act.map ? `<a href="${act.map}" target="_blank" class="inline-block mt-2 text-[10px] text-jp-red border border-jp-red px-2 py-1 rounded-full italic"><i class="fa-solid fa-location-dot mr-1"></i>MAP</a>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === tabId));
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.toggle('bg-[#B85042]', b === btn);
+            b.classList.toggle('text-white', b === btn);
+            b.classList.toggle('bg-white', b !== btn);
+            b.classList.toggle('text-slate-400', b !== btn);
+        });
+    }
+
+    function checkPin() {
+        if(prompt("請輸入 PIN (預設 007):") === "007") alert("已通過驗證，功能連結可於 code 中自訂。");
+        else alert("密碼錯誤。");
+    }
+
+    window.onload = () => { updateCountdown(); renderDatePicker(); changeDay(0); };
+</script>
+
 </body>
 </html>
