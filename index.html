@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kansai Luxury Travel 2026</title>
+    <title>Kansai Journey 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&family=Noto+Sans+TC:wght@300;500;700&family=Playfair+Display:ital,wght@1,600&display=swap');
         
-        :root { --navy: #1A2238; --gold: #C4A484; --paper: #FDFCFB; --eva-green: #009543; }
+        :root { --navy: #1A2238; --gold: #C4A484; --paper: #FDFCFB; }
         body { background-color: var(--paper); font-family: 'Noto Sans TC', sans-serif; color: var(--navy); }
         
         .date-font { font-family: 'Roboto', sans-serif; letter-spacing: -0.02em; }
@@ -17,184 +17,218 @@
         .tab-content.active { display: block; animation: luxFade 0.4s ease-out; }
         @keyframes luxFade { from { opacity: 0; } to { opacity: 1; } }
         
-        /* 裝飾性登機證視覺 */
+        /* 重新配置：深夜藍燙金登機證 */
         .boarding-pass { 
-            background: white; border-radius: 24px; position: relative; border: 1px solid #EEE; 
-            margin-bottom: 24px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+            background: white; border-radius: 24px; position: relative; border: 1px solid rgba(196,164,132,0.2); 
+            margin-bottom: 24px; overflow: hidden; box-shadow: 0 15px 35px rgba(26,34,56,0.08);
         }
         .pass-header { 
-            background: linear-gradient(135deg, var(--eva-green) 0%, #006b31 100%); 
-            padding: 12px 24px; color: white; display: flex; justify-content: space-between; align-items: center;
+            background: var(--navy); 
+            padding: 14px 24px; color: var(--gold); display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(196,164,132,0.3);
         }
-        .pass-body { padding: 24px; position: relative; }
+        .pass-body { padding: 24px; position: relative; background: linear-gradient(to bottom, #ffffff, #fafafa); }
         .pass-body::before, .pass-body::after {
-            content: ''; position: absolute; width: 28px; height: 28px; 
-            background: var(--paper); border-radius: 50%; top: 75%; transform: translateY(-50%); z-index: 10;
+            content: ''; position: absolute; width: 30px; height: 30px; 
+            background: var(--paper); border-radius: 50%; top: 70%; transform: translateY(-50%); z-index: 10;
+            border: 1px solid rgba(196,164,132,0.1);
         }
-        .pass-body::before { left: -14px; box-shadow: inset -3px 0 5px rgba(0,0,0,0.03); }
-        .pass-body::after { right: -14px; box-shadow: inset 3px 0 5px rgba(0,0,0,0.03); }
-        .dash-line { border-top: 2px dashed #EAEAEA; margin: 15px 0; }
+        .pass-body::before { left: -16px; }
+        .pass-body::after { right: -16px; }
+        .dash-line { border-top: 1.5px dashed var(--gold); opacity: 0.3; margin: 18px 0; }
         
-        /* 飯店照片容器 */
+        /* 飯店照片樣式 */
         .hotel-img-container {
-            width: 100%; height: 180px; border-radius: 20px 20px 0 0; 
-            overflow: hidden; background-color: #eee;
+            width: 100%; height: 200px; overflow: hidden; background-color: #eee;
         }
-        .hotel-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .hotel-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .lux-card:hover img { transform: scale(1.05); }
 
-        .lux-card { background: white; border-radius: 20px; box-shadow: 0 8px 25px rgba(26,34,56,0.05); border: 1px solid rgba(196,164,132,0.15); }
+        .lux-card { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(26,34,56,0.05); border: 1px solid rgba(196,164,132,0.15); overflow: hidden; }
         .glass-nav { background: rgba(26, 34, 56, 0.98); backdrop-filter: blur(15px); }
         .nav-active { color: var(--gold) !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-32">
+<body class="pb-36">
 
-    <header class="px-8 pt-12 pb-14 bg-[#1A2238] text-white rounded-b-[40px]">
+    <header class="px-8 pt-12 pb-16 bg-[#1A2238] text-white rounded-b-[45px] shadow-2xl">
         <div class="flex justify-between items-end">
             <div>
-                <h1 class="font-serif italic text-3xl text-[#C4A484]">Kansai Elite</h1>
-                <p class="text-[9px] tracking-[0.4em] opacity-40 uppercase font-bold">May 2026 Journey</p>
+                <h1 class="font-serif italic text-3xl text-[#C4A484] tracking-tight">Kansai Elite</h1>
+                <p class="text-[10px] tracking-[0.4em] opacity-50 uppercase font-bold mt-1">Private Itinerary 2026</p>
             </div>
             <div class="text-right">
-                <span id="weather-temp" class="text-2xl font-black date-font">--°C</span>
+                <span id="weather-temp" class="text-3xl font-black date-font text-[#C4A484]">--°C</span>
             </div>
         </div>
     </header>
 
-    <main id="tab-bookings" class="tab-content active px-6 -mt-8">
+    <main id="tab-bookings" class="tab-content active px-6 -mt-10">
         
         <div class="boarding-pass">
             <div class="pass-header">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-leaf"></i><span class="text-[10px] font-black uppercase tracking-widest">Eva Air</span></div>
-                <span class="date-font text-xs">BR 182</span>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-crown text-[10px]"></i><span class="text-[10px] font-black uppercase tracking-[0.2em]">Departing Flight</span></div>
+                <span class="date-font text-xs font-bold uppercase">BR 182</span>
             </div>
             <div class="pass-body">
-                <div class="flex justify-between items-center mb-2">
-                    <div class="text-left"><h2 class="date-font text-4xl font-black">KHH</h2><p class="text-[11px] opacity-40">Kaohsiung</p></div>
+                <div class="flex justify-between items-center">
+                    <div class="text-left"><h2 class="date-font text-4xl font-black text-[#1A2238]">KHH</h2><p class="text-[11px] opacity-40 font-bold uppercase">Kaohsiung</p></div>
                     <div class="flex-1 flex flex-col items-center px-4">
-                        <span class="text-[9px] font-bold text-gold uppercase mb-1 italic">3h 05m</span>
-                        <div class="w-full border-t-2 border-gold/20 relative">
-                            <i class="fa-solid fa-plane text-gold absolute -top-2 left-1/2 -translate-x-1/2 bg-white px-2"></i>
-                        </div>
+                        <i class="fa-solid fa-plane text-gold mb-1"></i>
+                        <div class="w-full border-t border-gold/30"></div>
                     </div>
-                    <div class="text-right"><h2 class="date-font text-4xl font-black">KIX</h2><p class="text-[11px] opacity-40">Osaka</p></div>
+                    <div class="text-right"><h2 class="date-font text-4xl font-black text-[#1A2238]">KIX</h2><p class="text-[11px] opacity-40 font-bold uppercase">Osaka</p></div>
                 </div>
                 <div class="dash-line"></div>
-                <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                    <div><p class="text-[8px] uppercase text-gray-400 font-bold">Date</p><p class="text-[11px] font-black">14 MAY 26</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-bold">Boarding</p><p class="text-[11px] font-black">06:35</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-bold">Seat</p><p class="text-[11px] font-black">Confirmed</p></div>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Date</p><p class="text-[12px] font-black date-font">MAY 14</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Boarding</p><p class="text-[12px] font-black date-font">06:35</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Gate</p><p class="text-[12px] font-black date-font">TBA</p></div>
                 </div>
             </div>
         </div>
 
         <div class="boarding-pass">
-            <div class="pass-header" style="filter: brightness(0.9);">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-leaf"></i><span class="text-[10px] font-black uppercase tracking-widest">Eva Air</span></div>
-                <span class="date-font text-xs">BR 147</span>
+            <div class="pass-header">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-crown text-[10px]"></i><span class="text-[10px] font-black uppercase tracking-[0.2em]">Return Flight</span></div>
+                <span class="date-font text-xs font-bold uppercase">BR 147</span>
             </div>
             <div class="pass-body">
-                <div class="flex justify-between items-center mb-2">
-                    <div class="text-left"><h2 class="date-font text-4xl font-black">KIX</h2><p class="text-[11px] opacity-40">Osaka</p></div>
+                <div class="flex justify-between items-center">
+                    <div class="text-left"><h2 class="date-font text-4xl font-black text-[#1A2238]">KIX</h2><p class="text-[11px] opacity-40 font-bold uppercase">Osaka</p></div>
                     <div class="flex-1 flex flex-col items-center px-4">
-                        <span class="text-[9px] font-bold text-gold uppercase mb-1 italic">3h 20m</span>
-                        <div class="w-full border-t-2 border-gold/20 relative">
-                            <i class="fa-solid fa-plane fa-rotate-180 text-gold absolute -top-2 left-1/2 -translate-x-1/2 bg-white px-2"></i>
-                        </div>
+                        <i class="fa-solid fa-plane fa-rotate-180 text-gold mb-1"></i>
+                        <div class="w-full border-t border-gold/30"></div>
                     </div>
-                    <div class="text-right"><h2 class="date-font text-4xl font-black">KHH</h2><p class="text-[11px] opacity-40">Kaohsiung</p></div>
+                    <div class="text-right"><h2 class="date-font text-4xl font-black text-[#1A2238]">KHH</h2><p class="text-[11px] opacity-40 font-bold uppercase">Kaohsiung</p></div>
                 </div>
                 <div class="dash-line"></div>
-                <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                    <div><p class="text-[8px] uppercase text-gray-400 font-bold">Date</p><p class="text-[11px] font-black">19 MAY 26</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-bold">Boarding</p><p class="text-[11px] font-black">20:00</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-bold">Seat</p><p class="text-[11px] font-black">Confirmed</p></div>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Date</p><p class="text-[12px] font-black date-font">MAY 19</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Boarding</p><p class="text-[12px] font-black date-font">20:00</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Gate</p><p class="text-[12px] font-black date-font">TBA</p></div>
                 </div>
             </div>
         </div>
 
-        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-[#C4A484] mb-4 mt-8 ml-2">Stay Details</h3>
-        <div class="lux-card mb-6 overflow-hidden">
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C4A484] mb-4 mt-8 ml-2">Accommodations</h3>
+        
+        <div class="lux-card mb-8">
             <div class="hotel-img-container">
-                <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80" alt="Kyoto Hotel">
+                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1000" alt="Kyoto Hotel">
             </div>
             <div class="p-6">
-                <h4 class="font-bold text-lg text-[#1A2238]">京都八條都酒店</h4>
+                <h4 class="font-bold text-xl text-[#1A2238]">京都八條都酒店</h4>
                 <div class="mt-4 space-y-3 text-[12px]">
                     <p class="flex items-start gap-3"><i class="fa-solid fa-location-dot mt-1 text-gold"></i><span>京都市南區西九條院町17 (京都站對面)</span></p>
                     <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-gold"></i><span>+81 75-661-7111</span></p>
-                    <div class="grid grid-cols-2 gap-4 pt-3 border-t border-gray-50">
-                        <div><span class="block text-[9px] text-gray-400 uppercase font-bold">Check In</span><span class="font-black text-sm date-font">15:00</span></div>
-                        <div><span class="block text-[9px] text-gray-400 uppercase font-bold">Check Out</span><span class="font-black text-sm date-font">11:00</span></div>
+                    <div class="grid grid-cols-2 gap-4 pt-4 mt-2 border-t border-gray-100">
+                        <div><span class="block text-[9px] text-gray-400 uppercase font-black">Check In</span><span class="font-black text-md date-font">15:00</span></div>
+                        <div><span class="block text-[9px] text-gray-400 uppercase font-black">Check Out</span><span class="font-black text-md date-font">11:00</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="lux-card mb-6 overflow-hidden">
+        <div class="lux-card mb-8">
             <div class="hotel-img-container">
-                <img src="https://images.unsplash.com/photo-1590001158193-79017998ee51?auto=format&fit=crop&w=800&q=80" alt="Osaka Hotel">
+                <img src="https://images.unsplash.com/photo-1590001158193-79017998ee51?q=80&w=1000" alt="Osaka Hotel">
             </div>
             <div class="p-6">
-                <h4 class="font-bold text-lg text-[#1A2238]">艾思利德酒店 難波南III</h4>
+                <h4 class="font-bold text-xl text-[#1A2238]">艾思利德酒店 難波南III</h4>
                 <div class="mt-4 space-y-3 text-[12px]">
                     <p class="flex items-start gap-3"><i class="fa-solid fa-location-dot mt-1 text-gold"></i><span>大阪府大阪市西成區太子1丁目</span></p>
                     <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-gold"></i><span>+81 6-6631-0001</span></p>
-                    <div class="grid grid-cols-2 gap-4 pt-3 border-t border-gray-50">
-                        <div><span class="block text-[9px] text-gray-400 uppercase font-bold">Check In</span><span class="font-black text-sm date-font">15:00</span></div>
-                        <div><span class="block text-[9px] text-gray-400 uppercase font-bold">Check Out</span><span class="font-black text-sm date-font">10:00</span></div>
+                    <div class="grid grid-cols-2 gap-4 pt-4 mt-2 border-t border-gray-100">
+                        <div><span class="block text-[9px] text-gray-400 uppercase font-black">Check In</span><span class="font-black text-md date-font">15:00</span></div>
+                        <div><span class="block text-[9px] text-gray-400 uppercase font-black">Check Out</span><span class="font-black text-md date-font">10:00</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <section id="tab-transport" class="tab-content px-6 -mt-8">
-        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-[#C4A484] mb-6 ml-2">Transit Maps (PDF)</h3>
+    <section id="tab-transport" class="tab-content px-6 -mt-10">
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C4A484] mb-6 ml-2">Transit Maps</h3>
         <div class="space-y-4">
-            <a href="https://subway.osakametro.co.jp/guide/library/rosenzu/20240323_osakametro_rosenzu.pdf" target="_blank" class="flex items-center justify-between p-5 bg-white rounded-2xl border border-[#EEE]">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-subway"></i></div>
-                    <div><p class="font-bold text-sm">大阪地下鐵</p></div>
-                </div>
-                <i class="fa-solid fa-angle-right text-gray-300"></i>
+            <a href="https://subway.osakametro.co.jp/guide/library/rosenzu/20240323_osakametro_rosenzu.pdf" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-4 text-blue-600"><i class="fa-solid fa-subway text-xl"></i><span class="font-bold text-gray-800">大阪地下鐵路線圖</span></div>
+                <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </a>
-            <a href="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" target="_blank" class="flex items-center justify-between p-5 bg-white rounded-2xl border border-[#EEE]">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600"><i class="fa-solid fa-bus"></i></div>
-                    <div><p class="font-bold text-sm">京都巴士/地鐵</p></div>
-                </div>
-                <i class="fa-solid fa-angle-right text-gray-300"></i>
+            <a href="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-4 text-green-600"><i class="fa-solid fa-bus text-xl"></i><span class="font-bold text-gray-800">京都巴士全圖</span></div>
+                <i class="fa-solid fa-chevron-right text-gray-300"></i>
+            </a>
+            <a href="https://www.westjr.co.jp/global/tc/pdf/route_map/kansai.pdf" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-4 text-red-600"><i class="fa-solid fa-train-subway text-xl"></i><span class="font-bold text-gray-800">HARUKA / JR 西日本</span></div>
+                <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </a>
         </div>
     </section>
 
-    <section id="tab-itinerary" class="tab-content px-6 -mt-8">
-        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-6 py-2" id="date-slider"></div>
-        <div id="itinerary-list" class="space-y-6"></div>
+    <section id="tab-itinerary" class="tab-content px-6 -mt-10">
+        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-8 py-2" id="date-slider"></div>
+        <div id="itinerary-list" class="space-y-8"></div>
     </section>
 
-    <nav class="fixed bottom-0 left-0 right-0 h-24 glass-nav flex justify-around items-center px-6 z-50 rounded-t-[30px]">
+    <nav class="fixed bottom-0 left-0 right-0 h-24 glass-nav flex justify-around items-center px-6 z-50 rounded-t-[35px] border-t border-white/10">
         <button onclick="changeTab('bookings', this)" class="nav-btn nav-active flex flex-col items-center gap-1 text-white/40">
-            <i class="fa-solid fa-passport text-xl"></i><span class="text-[9px] font-black uppercase">Books</span>
+            <i class="fa-solid fa-passport text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Books</span>
         </button>
         <button onclick="changeTab('transport', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40">
-            <i class="fa-solid fa-map-location-dot text-xl"></i><span class="text-[9px] font-black uppercase">Map</span>
+            <i class="fa-solid fa-map-location-dot text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Map</span>
         </button>
         <button onclick="changeTab('itinerary', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40">
-            <i class="fa-solid fa-calendar-days text-xl"></i><span class="text-[9px] font-black uppercase">Plan</span>
+            <i class="fa-solid fa-calendar-days text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Plan</span>
         </button>
     </nav>
 
 <script>
-    // 延續先前的行程資料 (tripData) ... 
     const tripData = [
-        { day: "01", date: "05/14", week: "Thu", activities: [{ time: "11:10", name: "關西國際機場 (KIX)", note: "抵達。搭乘 HARUKA 前往京都。", icon: "fa-plane-arrival" },{ time: "Stay", name: "京都八條都酒店", note: "京都車站正對面", icon: "fa-hotel" }]},
-        { day: "02", date: "05/15", week: "Fri", activities: [{ time: "09:00", name: "和服體驗", note: "清水寺區域散策", icon: "fa-person-dress" },{ time: "Stay", name: "艾思利德酒店 難波南III", note: "入住大阪", icon: "fa-key" }]},
-        { day: "03", date: "05/16", week: "Sat", activities: [{ time: "08:30", name: "KKDay 一日遊", note: "伊根、天橋立、美山", icon: "fa-bus" },{ time: "Stay", name: "艾思利德酒店 難波南III", note: "大阪飯店休息", icon: "fa-hotel" }]},
-        { day: "04", date: "05/17", week: "Sun", activities: [{ time: "10:00", name: "黑門市場", note: "大阪必食海味", icon: "fa-fish" },{ time: "Stay", name: "艾思利德酒店 難波南III", note: "大阪飯店休息", icon: "fa-hotel" }]},
-        { day: "05", date: "05/18", week: "Mon", activities: [{ time: "10:30", name: "神戶動物王國", note: "包車前往", icon: "fa-paw" },{ time: "Stay", name: "艾思利德酒店 難波南III", note: "大阪飯店休息", icon: "fa-hotel" }]},
-        { day: "06", date: "05/19", week: "Tue", activities: [{ time: "13:00", name: "臨空城 Outlet", note: "最後購物", icon: "fa-bag-shopping" },{ time: "20:35", name: "關西機場 (KIX)", note: "BR 147 返台", icon: "fa-plane-departure" }]}
+        { day: "01", date: "05/14", week: "Thu", activities: [
+            { time: "07:05", name: "高雄小港機場 (KHH)", note: "搭乘長榮航空 **BR 182** 直飛大阪。", icon: "fa-plane-departure" },
+            { time: "11:10", name: "關西國際機場 (KIX)", note: "抵達後辦理入境，購買 HARUKA 票券。", icon: "fa-plane-arrival" },
+            { time: "14:00", name: "京都車站", note: "搭乘特急抵達，前往飯店寄放行李。", icon: "fa-train" },
+            { time: "15:30", name: "祇園・花見小路", note: "尋找藝妓蹤影，漫步於傳統石鋪小路。", icon: "fa-camera-retro" },
+            { time: "18:00", name: "四條河原町散策", note: "京都最繁華商業區，享用抵達後的第一餐。", icon: "fa-utensils" },
+            { time: "STAY", name: "京都八條都酒店", note: "回到京都站正對面的飯店休息。", icon: "fa-hotel" }
+        ]},
+        { day: "02", date: "05/15", week: "Fri", activities: [
+            { time: "09:00", name: "璃光和服 清水寺店", note: "體驗日本傳統服飾，進行髮型造型。", icon: "fa-person-dress" },
+            { time: "10:30", name: "清水寺區域", note: "參拜清水舞台、地主神社、二三年坂。", icon: "fa-torii-gate" },
+            { time: "13:30", name: "錦市場", note: "京都人的廚房，品嚐在地小吃與豆乳甜點。", icon: "fa-fish" },
+            { time: "15:30", name: "金閣寺", note: "欣賞鹿苑寺舍利殿，夕陽倒映最美。", icon: "fa-sun" },
+            { time: "STAY", name: "艾思利德酒店 難波南III", note: "移動至大阪辦理入住 (連住四晚)。", icon: "fa-key" }
+        ]},
+        { day: "03", date: "05/16", week: "Sat", activities: [
+            { time: "08:30", name: "KKDay 專車集合", note: "開始「海之京都」一日遊行程。", icon: "fa-bus" },
+            { time: "11:00", name: "伊根灣舟屋", note: "搭乘遊覽船看特色舟屋，餵食海鷗。", icon: "fa-ship" },
+            { time: "13:30", name: "天橋立", note: "搭乘纜車前往展望台，看倒過來的「昇龍觀」。", icon: "fa-mountain" },
+            { time: "16:00", name: "美山茅草屋村落", note: "探訪隱世的合掌屋聚落。", icon: "fa-house" },
+            { time: "20:00", name: "心齋橋・道頓堀", note: "與固力果跑跑人拍照，品嚐章魚燒。", icon: "fa-lightbulb" },
+            { time: "STAY", name: "艾思利德酒店 難波南III", note: "飯店休息。", icon: "fa-hotel" }
+        ]},
+        { day: "04", date: "05/17", week: "Sun", activities: [
+            { time: "10:00", name: "黑門市場", note: "大阪人的廚房，品嚐海膽、和牛與鮮果。", icon: "fa-utensils" },
+            { time: "12:30", name: "天神橋筋商店街", note: "日本最長商店街，挖寶在地特色小物。", icon: "fa-shopping-cart" },
+            { time: "15:00", name: "通天閣", note: "登頂俯瞰大阪，體驗「新世界」復古風情。", icon: "fa-tower-observation" },
+            { time: "16:30", name: "新世界本通", note: "懷舊招牌林立，串炸愛好者的天堂。", icon: "fa-shop" },
+            { time: "STAY", name: "艾思利德酒店 難波南III", note: "飯店休息。", icon: "fa-hotel" }
+        ]},
+        { day: "05", date: "05/18", week: "Mon", activities: [
+            { time: "09:30", name: "神戶包車啟程", note: "今日全天包車接送前往神戶。", icon: "fa-car" },
+            { time: "10:30", name: "神戶動物王國", note: "近距離接觸水豚、小貓熊，觀看飛行表演。", icon: "fa-paw" },
+            { time: "13:30", name: "神戶南京町", note: "漫步神戶中華街，感受港都風情。", icon: "fa-archway" },
+            { time: "15:30", name: "神戶觀光遊覽船", note: "海上巡禮，一覽神戶塔與美利堅公園。", icon: "fa-anchor" },
+            { time: "17:30", name: "神戶臨海樂園 umie", note: "夜景漫步，在港灣旁享用晚餐。", icon: "fa-image" },
+            { time: "STAY", name: "艾思利德酒店 難波南III", note: "返回大阪飯店。", icon: "fa-hotel" }
+        ]},
+        { day: "06", date: "05/19", week: "Tue", activities: [
+            { time: "10:00", name: "難波八阪神社", note: "巨大獅子頭殿，祈求好運與圓滿。", icon: "fa-om" },
+            { time: "13:00", name: "臨空城 Outlet", note: "搭機前最後採購，補齊伴手禮與精品。", icon: "fa-bag-shopping" },
+            { time: "20:35", name: "關西國際機場 (KIX)", note: "搭乘 **BR 147** 帶著滿滿回憶返台。", icon: "fa-plane-departure" }
+        ]}
     ];
 
     async function fetchWeather() {
@@ -210,7 +244,7 @@
         document.getElementById(`tab-${tabId}`).classList.add('active');
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
         el.classList.add('nav-active');
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function renderDay(idx) {
@@ -218,26 +252,27 @@
         document.getElementById('itinerary-list').innerHTML = day.activities.map(act => `
             <div class="lux-card p-6 border-l-4 border-l-[#C4A484]">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="date-font text-xs font-black text-gold uppercase tracking-tighter">${act.time}</span>
-                    <i class="fa-solid ${act.icon} text-gray-200 text-xs"></i>
+                    <span class="date-font text-[13px] font-black text-gold uppercase">${act.time}</span>
+                    <i class="fa-solid ${act.icon} text-gray-100 text-sm"></i>
                 </div>
                 <h4 class="text-md font-bold text-[#1A2238]">${act.name}</h4>
-                <p class="text-[10px] text-gray-400 mt-1 leading-relaxed">${act.note}</p>
+                <p class="text-[11px] text-gray-400 mt-2 leading-relaxed">${act.note.replace(/\*\*(.*?)\*\*/g, '<b class="text-gray-600">$1</b>')}</p>
             </div>
         `).join('');
         document.querySelectorAll('.day-btn').forEach((b, i) => {
             b.classList.toggle('bg-[#1A2238]', i === idx);
             b.classList.toggle('text-[#C4A484]', i === idx);
-            b.classList.toggle('text-gray-400', i !== idx);
+            b.classList.toggle('scale-110', i === idx);
+            b.classList.toggle('shadow-lg', i === idx);
         });
     }
 
     window.onload = () => {
         const slider = document.getElementById('date-slider');
         slider.innerHTML = tripData.map((d, i) => `
-            <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 w-12 h-16 rounded-xl flex flex-col items-center justify-center transition-all bg-white shadow-sm text-gray-400">
-                <span class="date-font text-[14px] font-black leading-none">${d.day}</span>
-                <span class="text-[8px] mt-1 font-bold uppercase tracking-tighter">${d.week}</span>
+            <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 w-14 h-18 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 bg-white shadow-sm text-gray-400 border border-gray-100">
+                <span class="date-font text-[16px] font-black leading-none">${d.day}</span>
+                <span class="text-[8px] mt-1 font-bold uppercase tracking-wider">${d.week}</span>
             </button>
         `).join('');
         renderDay(0);
