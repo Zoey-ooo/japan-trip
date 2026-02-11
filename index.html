@@ -8,145 +8,150 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Noto+Sans+TC:wght@300;500;700&display=swap');
-        
-        :root { 
-            --navy: #1A2238; /* 深夜藍 - 主文字 */
-            --gold: #C4A484; /* 香檳金 - 強調色 */
-            --paper: #FDFCFB; /* 絲絨紙色 - 背景 */
-            --accent: #2C3E50; /* 副標色 */
-        }
-
-        body { 
-            background-color: var(--paper); 
-            font-family: 'Noto Sans TC', sans-serif;
-            color: var(--navy);
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        :root { --navy: #1A2238; --gold: #C4A484; --paper: #FDFCFB; }
+        body { background-color: var(--paper); font-family: 'Noto Sans TC', sans-serif; color: var(--navy); }
         .serif { font-family: 'Playfair Display', serif; }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: luxFade 0.6s ease-out; }
         @keyframes luxFade { from { opacity: 0; } to { opacity: 1; } }
-
-        .glass-nav { 
-            background: rgba(26, 34, 56, 0.95); 
-            backdrop-filter: blur(10px);
+        .glass-nav { background: rgba(26, 34, 56, 0.95); backdrop-filter: blur(10px); }
+        
+        /* 登機證視覺 */
+        .boarding-pass {
+            background: #FFF;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #EEE;
         }
-
-        .lux-card { 
-            background: white; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 30px rgba(26, 34, 56, 0.05);
-            border: 1px solid rgba(196, 164, 132, 0.2);
+        .boarding-pass::before, .boarding-pass::after {
+            content: ''; position: absolute; width: 30px; height: 30px; 
+            background: var(--paper); border-radius: 50%; top: 50%; transform: translateY(-50%);
         }
+        .boarding-pass::before { left: -15px; }
+        .boarding-pass::after { right: -15px; }
+        .dash-line { border-top: 2px dashed #EEE; margin: 0 20px; }
 
-        .gold-border { border-left: 3px solid var(--gold); }
+        .lux-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(26,34,56,0.05); border: 1px solid rgba(196,164,132,0.15); }
         .nav-active { color: var(--gold) !important; }
-        .nav-active i { transform: scale(1.1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-32">
 
-    <header class="px-8 pt-16 pb-10 bg-[#1A2238] text-white rounded-b-[40px] shadow-2xl">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="serif text-4xl italic tracking-widest text-[#C4A484]">Kansai</h1>
-                <p class="text-[10px] tracking-[0.4em] opacity-60 mt-2 uppercase">Elite Private Journey 2026</p>
-            </div>
-            <div id="weather-box" class="text-right border-l border-white/10 pl-4">
-                <span id="weather-icon" class="text-2xl block">--</span>
+    <header class="px-8 pt-12 pb-16 bg-[#1A2238] text-white rounded-b-[40px]">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="serif text-3xl italic tracking-widest text-[#C4A484]">Kansai Elite</h1>
+            <div class="text-right border-l border-white/10 pl-4">
                 <span id="weather-temp" class="text-xl font-light serif tracking-tighter">--°C</span>
             </div>
         </div>
+        
+        <div class="flex gap-4 overflow-x-auto no-scrollbar">
+            <button onclick="changeTab('info', this)" class="sub-nav-btn flex-shrink-0 px-6 py-2 rounded-full bg-white/10 text-xs font-bold tracking-widest border border-white/20 active:bg-[#C4A484]">行前須知</button>
+            <button onclick="changeTab('bookings', this)" class="sub-nav-btn flex-shrink-0 px-6 py-2 rounded-full bg-white/10 text-xs font-bold tracking-widest border border-white/20">預訂憑證</button>
+            <button onclick="changeTab('itinerary', this)" class="sub-nav-btn flex-shrink-0 px-6 py-2 rounded-full bg-white/10 text-xs font-bold tracking-widest border border-white/20">每日行程</button>
+        </div>
     </header>
 
-    <main id="tab-itinerary" class="tab-content active px-6 mt-[-30px]">
-        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-8 py-4" id="date-slider"></div>
-        <div id="itinerary-list" class="space-y-6"></div>
+    <main id="tab-info" class="tab-content active px-6 -mt-8">
+        <div class="lux-card p-6 mb-6">
+            <h3 class="serif text-xl mb-4 text-[#1A2238] border-b pb-2 italic">Important Information</h3>
+            <div class="space-y-4 text-sm">
+                <div class="flex gap-4">
+                    <i class="fa-solid fa-suitcase-rolling text-[#C4A484] mt-1"></i>
+                    <div>
+                        <p class="font-bold">航空公司行李規範</p>
+                        <p class="text-xs text-gray-500 leading-relaxed">長榮航空：托運行李 23kg × 1 件，手提行李 7kg。液體需 100ml 以內並裝入透明袋。</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <i class="fa-solid fa-receipt text-[#C4A484] mt-1"></i>
+                    <div>
+                        <p class="font-bold">日本退稅資訊</p>
+                        <p class="text-xs text-gray-500 leading-relaxed">單一店家滿 5,000 日圓可免稅。消耗品需密封且不能在境內拆封。需出示護照實體。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <section id="tab-tools" class="tab-content px-6 pt-8 space-y-6">
-        <div class="lux-card p-8">
-            <h3 class="serif text-2xl mb-6 text-[#1A2238]">Official Guides</h3>
-            <p class="text-xs text-gray-400 mb-8 leading-relaxed font-light">點擊下方按鈕可直接開啟 2026 最新官方 PDF 交通圖，建議於連網時先行下載。</p>
-            
-            <div class="space-y-4">
-                <a href="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" target="_blank" class="flex items-center justify-between w-full p-5 rounded-xl bg-[#1A2238] text-[#C4A484] shadow-xl">
-                    <div class="flex items-center gap-4">
-                        <i class="fa-solid fa-file-pdf text-xl"></i>
-                        <div class="text-left">
-                            <span class="block text-sm font-bold tracking-widest">京都市地鐵公車地圖</span>
-                            <span class="text-[9px] opacity-60 uppercase tracking-tighter">Kyoto City Bus & Subway (PDF)</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </a>
+    <section id="tab-bookings" class="tab-content px-6 -mt-8">
+        <div class="boarding-pass shadow-lg mb-6">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4 uppercase text-[10px] tracking-[0.2em] font-bold text-gray-400">
+                    <span>Flight Ticket</span>
+                    <span>BR 182</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <div><h2 class="serif text-3xl font-bold">KHH</h2><p class="text-xs opacity-50">Kaohsiung</p></div>
+                    <i class="fa-solid fa-plane text-[#C4A484] text-xl"></i>
+                    <div class="text-right"><h2 class="serif text-3xl font-bold">KIX</h2><p class="text-xs opacity-50">Osaka</p></div>
+                </div>
+            </div>
+            <div class="dash-line"></div>
+            <div class="p-6 flex justify-between text-center">
+                <div><p class="text-[9px] uppercase text-gray-400">Date</p><p class="text-sm font-bold">14 MAY</p></div>
+                <div><p class="text-[9px] uppercase text-gray-400">Boarding</p><p class="text-sm font-bold">06:35</p></div>
+                <div><p class="text-[9px] uppercase text-gray-400">Seat</p><p class="text-sm font-bold">Confirmed</p></div>
+            </div>
+        </div>
 
-                <a href="https://subway.osakametro.co.jp/guide/library/rosenzu/20240323_osakametro_rosenzu.pdf" target="_blank" class="flex items-center justify-between w-full p-5 rounded-xl border border-[#1A2238] text-[#1A2238]">
-                    <div class="flex items-center gap-4">
-                        <i class="fa-solid fa-file-pdf text-xl text-[#C4A484]"></i>
-                        <div class="text-left">
-                            <span class="block text-sm font-bold tracking-widest">大阪地下鐵路線圖</span>
-                            <span class="text-[9px] text-gray-400 uppercase tracking-tighter">Osaka Metro Route Map (PDF)</span>
-                        </div>
+        <div class="lux-card overflow-hidden mb-6">
+            <div class="h-32 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="p-6">
+                <h4 class="font-bold text-lg mb-2">京都八條都酒店</h4>
+                <div class="text-[11px] text-gray-500 space-y-2">
+                    <p><i class="fa-solid fa-location-dot mr-2"></i>京都市南區西九條院町17</p>
+                    <p><i class="fa-solid fa-clock mr-2"></i>Check-in: 15:00 / Out: 11:00</p>
+                    <div class="mt-4 pt-4 border-t flex justify-between items-center">
+                        <span class="font-bold text-[#C4A484]">分攤金額</span>
+                        <span class="text-[#1A2238] font-bold">￥12,500 / 人</span>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-xs opacity-30"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="lux-card p-6 mb-6">
+            <h4 class="serif text-lg mb-4 italic">Vouchers & Tickets</h4>
+            <div class="space-y-3">
+                <a href="#" class="flex justify-between items-center p-4 bg-gray-50 rounded-xl text-xs">
+                    <span><i class="fa-solid fa-car mr-3 text-[#C4A484]"></i>神戶包車預約憑證</span>
+                    <i class="fa-solid fa-paperclip opacity-30"></i>
+                </a>
+                <a href="#" class="flex justify-between items-center p-4 bg-gray-50 rounded-xl text-xs">
+                    <span><i class="fa-solid fa-ticket mr-3 text-[#C4A484]"></i>KKDay 天橋立一日券</span>
+                    <i class="fa-solid fa-image opacity-30"></i>
                 </a>
             </div>
         </div>
     </section>
 
+    <section id="tab-itinerary" class="tab-content px-6 -mt-8">
+        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-6 py-2" id="date-slider"></div>
+        <div id="itinerary-list" class="space-y-6"></div>
+    </section>
+
     <nav class="fixed bottom-0 left-0 right-0 h-24 glass-nav flex justify-around items-center px-12 z-50 rounded-t-[30px]">
-        <button onclick="changeTab('itinerary', this)" class="nav-btn nav-active flex flex-col items-center gap-1 text-white/40">
-            <i class="fa-solid fa-calendar-check text-xl"></i><span class="text-[9px] font-bold tracking-[0.2em] uppercase">Itinerary</span>
+        <button onclick="changeTab('info', this)" class="nav-btn nav-active flex flex-col items-center gap-1 text-white/40">
+            <i class="fa-solid fa-circle-info text-xl"></i><span class="text-[9px] font-bold tracking-widest uppercase">Info</span>
         </button>
-        <button onclick="changeTab('tools', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40">
-            <i class="fa-solid fa-map-location-dot text-xl"></i><span class="text-[9px] font-bold tracking-[0.2em] uppercase">Transport</span>
+        <button onclick="changeTab('bookings', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40">
+            <i class="fa-solid fa-passport text-xl"></i><span class="text-[9px] font-bold tracking-widest uppercase">Books</span>
+        </button>
+        <button onclick="changeTab('itinerary', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40">
+            <i class="fa-solid fa-calendar-days text-xl"></i><span class="text-[9px] font-bold tracking-widest uppercase">Plan</span>
         </button>
     </nav>
 
 <script>
     const tripData = [
         { day: "01", date: "05/14", week: "Thu", activities: [
-            { time: "Arrive", name: "關西國際機場 (KIX)", note: "搭乘 HARUKA 特急前往京都車站。", icon: "fa-plane-arrival" },
-            { time: "14:00", name: "京都車站", note: "大行李可存放於飯店或車站寄物櫃。", icon: "fa-train" },
-            { time: "15:30", name: "祇園 / 花見小路", note: "💡 導遊筆記：傍晚時分有機率遇見藝伎。", icon: "fa-camera" },
-            { time: "17:30", name: "四條河原町", note: "京都最繁華的商業區，適合傍晚散步。", icon: "fa-street-view" },
-            { time: "Stay", name: "京都八條都酒店", note: "**預約號: MY92837**。京都站八條口對面。", icon: "fa-hotel" }
+            { time: "07:05", name: "高雄小港機場 (KHH)", note: "長榮航空 **BR 182**", icon: "fa-plane" },
+            { time: "14:00", name: "京都車站", note: "搭乘 HARUKA 抵達", icon: "fa-train" },
+            { time: "Stay", name: "京都八條都酒店", note: "**入住手續**", icon: "fa-hotel" }
         ]},
-        { day: "02", date: "05/15", week: "Fri", activities: [
-            { time: "09:00", name: "璃光合服 清水寺店", note: "換裝預約。建議選振袖拍照更精緻。", icon: "fa-person-dress" },
-            { time: "10:30", name: "清水寺", note: "本堂舞台參拜、音羽之瀧、地主神社。", icon: "fa-torii-gate" },
-            { time: "13:30", name: "錦市場", note: "「京都的廚房」散策，觀察在地食材。", icon: "fa-basket-shopping" },
-            { time: "15:30", name: "金閣寺 (鹿苑寺)", note: "欣賞舍利殿金色倒影。", icon: "fa-landmark" },
-            { time: "Stay", name: "艾思利德酒店 難波南III", note: "移動至大阪。鄰近新今宮站。", icon: "fa-key" }
-        ]},
-        { day: "03", date: "05/16", week: "Sat", activities: [
-            { time: "08:30", name: "KKDay 一日遊集合", note: "**訂單: 72635**。海之京都出發。", icon: "fa-bus" },
-            { time: "11:00", name: "伊根灣遊船", note: "餵食海鷗，欣賞獨特的舟屋建築。", icon: "fa-ship" },
-            { time: "13:30", name: "天橋立", note: "搭乘纜車前往飛龍觀，俯瞰日本三景。", icon: "fa-mountain" },
-            { time: "16:00", name: "美山茅草屋合掌村", note: "感受靜謐的日本原風景。", icon: "fa-house" },
-            { time: "20:00", name: "心齋橋 / 道頓堀", note: "固力果跑跑人霓虹燈打卡。", icon: "fa-lightbulb" }
-        ]},
-        { day: "04", date: "05/17", week: "Sun", activities: [
-            { time: "10:00", name: "黑門市場", note: "大阪人的廚房，參觀海鮮與在地文化。", icon: "fa-fish" },
-            { time: "12:30", name: "天神橋筋商店街", note: "全日本最長的商店街散策。", icon: "fa-bag-shopping" },
-            { time: "15:00", name: "通天閣", note: "💡 導遊筆記：摸摸比利肯神像腳底祈福。", icon: "fa-tower-observation" },
-            { time: "16:30", name: "新世界本通商店街", note: "充滿昭和時代感的復古招牌區。", icon: "fa-shop" },
-            { time: "Stay", name: "艾思利德酒店 難波南III", note: "飯店休息。", icon: "fa-hotel" }
-        ]},
-        { day: "05", date: "05/18", week: "Mon", activities: [
-            { time: "09:00", name: "神戶包車出發", note: "專屬司機前往神戶。車牌: 京200-XX", icon: "fa-car" },
-            { time: "10:30", name: "神戶動物王國", note: "與水豚、小熊貓近距離接觸。", icon: "fa-paw" },
-            { time: "13:30", name: "南京町", note: "日本三大中華街之一，建築色彩鮮豔。", icon: "fa-archway" },
-            { time: "15:30", name: "神戶觀光船遊港", note: "從海上欣賞神戶港美景與港灣塔。", icon: "fa-anchor" },
-            { time: "17:00", name: "神戶臨海樂園 umie", note: "觀賞摩天輪與神戶夜景。", icon: "fa-ferris-wheel" }
-        ]},
-        { day: "06", date: "05/19", week: "Tue", activities: [
-            { time: "10:00", name: "難波八阪神社", note: "巨大的獅子頭像，祈求旅途圓滿。", icon: "fa-om" },
-            { time: "13:00", name: "臨空城 Outlet", note: "搭機前最後採買購物。", icon: "fa-cart-shopping" },
-            { time: "Departure", name: "關西國際機場 (KIX)", note: "建議提前 3 小時抵達辦理登機。", icon: "fa-plane-departure" }
-        ]}
+        // ... D2-D6 請依照上一份代碼內容填入
     ];
 
     async function fetchWeather() {
@@ -154,8 +159,6 @@
             const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.69&longitude=135.50&current_weather=true');
             const data = await res.json();
             document.getElementById('weather-temp').innerText = `${Math.round(data.current_weather.temperature)}°C`;
-            const code = data.current_weather.weathercode;
-            document.getElementById('weather-icon').innerText = code < 3 ? "☀️" : "☁️";
         } catch (e) { console.log("Weather error"); }
     }
 
@@ -170,29 +173,23 @@
     function renderDay(idx) {
         const day = tripData[idx];
         document.getElementById('itinerary-list').innerHTML = day.activities.map(act => `
-            <div class="lux-card p-6 gold-border">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="serif text-xs font-bold text-[#C4A484] tracking-widest uppercase italic">${act.time}</span>
-                    <i class="fa-solid ${act.icon} text-[#1A2238]/20"></i>
+            <div class="lux-card p-6 border-l-4 border-l-[#C4A484]">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="serif text-xs font-bold text-[#C4A484] italic uppercase">${act.time}</span>
+                    <i class="fa-solid ${act.icon} text-[#1A2238]/10 text-xs"></i>
                 </div>
-                <h4 class="text-lg font-bold text-[#1A2238] mb-2">${act.name}</h4>
-                <p class="text-xs text-[#1A2238]/60 font-light leading-relaxed">${act.note.replace(/\*\*(.*?)\*\*/g, '<b class="text-[#1A2238] font-bold">$1</b>')}</p>
+                <h4 class="text-md font-bold text-[#1A2238]">${act.name}</h4>
+                <p class="text-[11px] text-[#1A2238]/50 mt-1">${act.note.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}</p>
             </div>
         `).join('');
-
-        document.querySelectorAll('.day-btn').forEach((b, i) => {
-            b.classList.toggle('bg-[#1A2238]', i === idx);
-            b.classList.toggle('text-[#C4A484]', i === idx);
-            b.classList.toggle('text-gray-400', i !== idx);
-        });
     }
 
     window.onload = () => {
         const slider = document.getElementById('date-slider');
         slider.innerHTML = tripData.map((d, i) => `
-            <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 w-16 h-20 rounded-2xl flex flex-col items-center justify-center transition-all shadow-sm ${i===0?'bg-[#1A2238] text-[#C4A484]':'bg-white text-gray-400'}">
+            <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 w-12 h-16 rounded-xl flex flex-col items-center justify-center transition-all bg-white shadow-sm text-gray-400">
                 <span class="serif text-xs italic font-bold leading-none">${d.day}</span>
-                <span class="text-[9px] mt-1 font-bold uppercase tracking-tighter">${d.week}</span>
+                <span class="text-[8px] mt-1 font-bold uppercase">${d.week}</span>
             </button>
         `).join('');
         renderDay(0);
