@@ -3,155 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大阪京都旅遊手冊</title>
+    <title>2026 家族旅遊手冊</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-red: #B85042;
-            --bg-color: #f7f7f7;
-            --card-bg: #ffffff;
-            --accent-green: #A7BEAE;
-        }
-        body {
-            font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-            background-color: var(--bg-color);
-            margin: 0; padding: 15px; line-height: 1.6;
-        }
-        .container { max-width: 600px; margin: 0 auto; }
-        
-        /* Tab 樣式 */
-        .tabs {
-            display: flex; background: #eee; border-radius: 10px;
-            margin-bottom: 20px; padding: 5px;
-        }
-        .tab-btn {
-            flex: 1; padding: 12px; border: none; background: none;
-            cursor: pointer; font-weight: bold; color: #666;
-            border-radius: 8px; transition: 0.3s;
-        }
-        .tab-btn.active {
-            background: white; color: var(--primary-red);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        :root { --jp-red: #B85042; --jp-beige: #F9F8F6; --jp-green: #76885B; }
+        body { background-color: var(--jp-beige); font-family: -apple-system, sans-serif; }
+        .rounded-handbook { border-radius: 2rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        /* Header & Cards */
-        .header {
-            background: var(--primary-red);
-            color: white; padding: 25px 20px;
-            border-radius: 15px; text-align: center; margin-bottom: 20px;
-        }
-        .flight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .flight-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #eee; font-size: 0.85em; }
-
-        .day-box, .info-box {
-            background: white; border-radius: 12px;
-            padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .day-header {
-            border-bottom: 2px solid var(--primary-red); padding-bottom: 10px; margin-bottom: 15px;
-            color: var(--primary-red); font-weight: bold; font-size: 1.1em;
-        }
-        
-        .activity, .note-item { padding: 12px 0; border-bottom: 1px dashed #eee; }
-        .activity:last-child, .note-item:last-child { border-bottom: none; }
-        .act-name { font-weight: bold; display: block; color: #333; }
-        .act-desc { color: #666; font-size: 0.9em; margin: 4px 0; }
-
-        .map-link {
-            display: inline-flex; align-items: center; background: #fff;
-            color: var(--primary-red); border: 1px solid var(--primary-red);
-            padding: 4px 12px; border-radius: 20px; text-decoration: none;
-            font-size: 0.8em; margin-top: 8px;
-        }
-
-        .tag {
-            font-size: 0.75em; padding: 2px 8px; border-radius: 4px;
-            margin-right: 5px; color: white; background: var(--accent-green);
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
+<body class="pb-24">
 
-<div class="container">
-    <div class="header">
-        <h2 style="margin:0">🗾 大阪京都旅遊手冊</h2>
-        <p style="margin:5px 0 0 0; opacity:0.9">2026.05.14 - 05.19</p>
+    <div class="bg-[#B85042] text-white p-8 rounded-b-[3rem] shadow-lg text-center">
+        <h1 class="text-2xl font-bold italic">Family Trip in Japan</h1>
+        <p class="mt-2 text-sm opacity-90">2026.05.14 - 05.19 (6天5夜)</p>
     </div>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab('itinerary')">🗓️ 詳細行程</button>
-        <button class="tab-btn" onclick="openTab('notes')">⚠️ 注意事項</button>
+    <div class="flex px-6 mt-6 gap-2">
+        <button id="btn-itinerary" onclick="openTab('itinerary')" class="flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all bg-[#B85042] text-white">🗓️ 詳細行程</button>
+        <button id="btn-notes" onclick="openTab('notes')" class="flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all bg-white text-slate-400">⚠️ 注意事項</button>
     </div>
 
-    <div id="itinerary" class="tab-content active">
-        <div class="flight-grid">
-            <div class="flight-card"><h4>去 BR 182 (T1)</h4>KHH 07:05<br>➔ KIX 11:10</div>
-            <div class="flight-card"><h4>回 BR 147 (T1)</h4>KIX 20:35<br>➔ KHH 22:55</div>
-        </div>
-        <div id="itinerary-list"></div>
-    </div>
-
-    <div id="notes" class="tab-content">
-        <div class="info-box">
-            <div class="day-header">🧳 航空公司規定</div>
-            <div class="note-item"><span class="tag">隨身</span> 行動電源、電池、打火機(1個)必須隨身，禁止託運。</div>
-            <div class="note-item"><span class="tag">託運</span> 腳架、自拍棒、液體(>100ml)必須託運。</div>
-        </div>
-        <div class="info-box">
-            <div class="day-header">🚆 交通規定與禮儀</div>
-            <div class="note-item"><span class="tag">搭車</span> 車廂內保持安靜，將手機轉為靜音模式。</div>
-            <div class="note-item"><span class="tag">IC卡</span> 下車前確認 ICOCA 餘額，便利商店也可加值。</div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // --- 行程資料區：天數格式已修改為「第X天」 ---
-    const tripData = [
-        {
-            dayText: "第一天", date: "05/14(三)", title: "抵達京都",
-            activities: [
-                { name: "京都八條都酒店", desc: "飯店 Check-in 放置行李", map: "https://goo.gl/maps/example1" },
-                { name: "祇園花見小路", desc: "散策、晚餐、感受京都風情", map: "https://goo.gl/maps/example2" }
-            ]
-        },
-        {
-            dayText: "第二天", date: "05/15(四)", title: "清水寺巡禮",
-            activities: [
-                { name: "清水寺 / 二年坂", desc: "和服體驗、拍攝大舞台", map: "https://goo.gl/maps/example3" }
-            ]
-        }
-        // 您可以依照這個格式繼續增加第三天、第四天...
-    ];
-
-    function openTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
-
-    function render() {
-        const list = document.getElementById('itinerary-list');
-        list.innerHTML = tripData.map(day => `
-            <div class="day-box">
-                <div class="day-header">${day.dayText} ${day.date}</div>
-                <div style="font-size:0.9em; color:#666; margin-bottom:10px;">${day.title}</div>
-                ${day.activities.map(act => `
-                    <div class="activity">
-                        <span class="act-name">📍 ${act.name}</span>
-                        <div class="act-desc">${act.desc}</div>
-                        ${act.map ? `<a href="${act.map}" target="_blank" class="map-link">🗺️ 查看地圖</a>` : ''}
-                    </div>
-                `).join('')}
+    <div id="itinerary" class="tab-content active p-6 space-y-6">
+        
+        <div class="bg-white p-6 rounded-handbook shadow-md border border-red-50 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-center">
+                    <p class="text-3xl font-black text-slate-800">KHH</p>
+                    <p class="text-[10px] text-slate-400 font-bold">高雄 (07:05)</p>
+                </div>
+                <div class="flex-1 px-4 flex flex-col items-center">
+                    <i class="fa-solid fa-plane text-[#B85042]"></i>
+                    <div class="w-full border-t border-dashed border-gray-200 mt-2"></div>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-black text-slate-800">KIX</p>
+                    <p class="text-[10px] text-slate-400 font-bold">大阪 (11:10)</p>
+                </div>
             </div>
-        `).join('');
-    }
+            <div class="flex justify-between text-[10px] font-bold text-slate-400">
+                <span>EVA AIR BR 182</span>
+                <span>TERMINAL 1</span>
+            </div>
+        </div>
 
-    window.onload = render;
-</script>
+        <div id="itinerary-list" class="space-y-8"></div>
+    </div>
 
+    <div id="notes" class="tab-content p-6 space-y-4">
+        <div class="bg-white p-6 rounded-handbook shadow-md">
+            <h3 class="text-[#B85042] font-bold mb-4 border-b pb-2"><i class="fa-solid fa-suitcase-rolling mr-2"></i>行李與登機規定</h3>
+            <ul class="text-sm space-y-3 text-slate-600">
+                <li><span class="bg-orange-100 text-orange-600 px-2 py-0.5 rounded mr-2">隨身</span>行動電源、相機電池、打火機(1個)必須隨身。</li>
+                <li><span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded mr-2">託運</span>腳架、自拍棒(收合>60cm)、液體(>100ml)須託運。</li>
+                <li><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded mr-2">重量</span>長榮託運通常為 23kg，請注意回程重量。</li>
+            </ul>
+        </div>
+        <div class="bg-white p-6 rounded-handbook shadow-md">
+            <h3 class="text-[#B85042] font-bold mb-4 border-b pb-2"><i class="fa-solid fa-train-subway mr-2"></i>日本交通禮儀</h3>
+            <ul class="text-sm space-y-3 text-slate-600">
+                <li>🚂 電車內請將手機轉靜音，避免大聲通話。</li>
+                <li>🚶 靠邊行走，電扶梯依地區（大阪靠右，京都靠左/隨流）。</li>
+                <li>💳 下車前確保 ICOCA 餘額充足。</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 核心行程資料
+        const tripData = [
+            { dayText: "第一天", date: "05/14(三)", title: "抵達京都", activities: [
+                { name: "關西機場 (T1) > 京都車站", desc: "搭乘 HARUKA 特急 (約 80 分鐘)", map: "https://maps.app.goo.gl/uXp9GfR6uG6u55n99" },
+                { name: "京都八條都酒店", desc: "🏨 Check-in / 祇園、四條河原町散策", map: "https://maps.app.goo.gl/TpxTfF6P5P5P5P5P5" }
+            ]},
+            { dayText: "第二天", date: "05/15(四)", title: "京都巡禮", activities: [
+                { name: "璃光和服 清水寺店", desc: "👘 預約和服體驗", map: "" },
+                { name: "清水寺 > 錦市場 > 金閣寺", desc: "⛩️ 體驗日本傳統建築與美食之旅", map: "" },
+                { name: "艾思利德酒店 難波南III", desc: "🏨 移動至大阪入住", map: "" }
+            ]},
+            { dayText: "第三天", date: "05/16(五)", title: "海之京都", activities: [
+                { name: "KKDay 一日遊行程", desc: "🚤 伊根灣遊船 > 天橋立 > 美山茅草屋", map: "" },
+                { name: "心齋橋 > 道頓堀", desc: "🛍️ 晚餐：一蘭拉麵、章魚燒、藥妝採買", map: "" }
+            ]},
+            { dayText: "第四天", date: "05/17(六)", title: "大阪下町", activities: [
+                { name: "黑門市場 > 天神橋筋", desc: "🍱 早午餐：和牛、海鮮串燒", map: "" },
+                { name: "通天閣 > 新世界", desc: "🗼 必看：巨大的河豚與比利肯像", map: "" }
+            ]},
+            { dayText: "第五天", date: "05/18(日)", title: "神戶包車", activities: [
+                { name: "神戶動物王國 > 南京町", desc: "🦥 水豚、小貓熊與中華街美食", map: "" },
+                { name: "神戶觀光船 > 臨海樂園 umie", desc: "🎡 眺望神戶港絕美夜景", map: "" }
+            ]},
+            { dayText: "第六天", date: "05/19(一)", title: "購物回程", activities: [
+                { name: "難波八阪神社", desc: "👹 巨大獅子頭舞台，祈求學業與健康", map: "" },
+                { name: "臨空城 Outlet > 關西機場", desc: "✈️ 最後採購、搭機 BR 147 (20:35)", map: "" }
+            ]}
+        ];
+
+        // 頁面切換邏輯
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            const isItinerary = tabId === 'itinerary';
+            document.getElementById('btn-itinerary').className = `flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all ${isItinerary ? 'bg-[#B85042] text-white' : 'bg-white text-slate-400'}`;
+            document.getElementById('btn-notes').className = `flex-1 py-3 rounded-2xl font-bold shadow-sm transition-all ${!isItinerary ? 'bg-[#B85042] text-white' : 'bg-white text-slate-400'}`;
+        }
+
+        // 渲染行程列表
+        function renderItinerary() {
+            const container = document.getElementById('itinerary-list');
+            container.innerHTML = tripData.map(day => `
+                <div class="bg-white p-6 rounded-handbook shadow-sm border border-gray-100">
+                    <h3 class="text-[#B85042] font-bold text-lg mb-4 underline decoration-wavy decoration-[#E7E8D1] italic">
+                        ${day.dayText} ${day.date}
+                    </h3>
+                    <ul class="space-y-6 border-l-2 border-[#E7E8D1] ml-2 pl-6 relative">
+                        ${day.activities.map(act => `
+                            <li class="relative">
+                                <div class="absolute -left-[1.85rem] top-1.5 w-3 h-3 rounded-full bg-[#B85042]"></div>
+                                <p class="font-bold text-slate-800">${act.name}</p>
+                                <p class="text-xs text-slate-400 mt-1 italic">${act.desc}</p>
+                                ${act.map ? `<a href="${act.map}" target="_blank" class="inline-block mt-2 text-[10px] bg-slate-50 border border-slate-200 px-3 py-1 rounded-full text-[#B85042]"><i class="fa-solid fa-location-dot mr-1"></i>查看地圖</a>` : ''}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        }
+
+        window.onload = renderItinerary;
+    </script>
 </body>
 </html>
