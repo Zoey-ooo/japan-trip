@@ -17,7 +17,7 @@
         }
 
         body { 
-            background-color: #FAF9F6; /* 米白色底，日式紙感 */
+            background-color: #FAF9F6; 
             font-family: 'Inter', 'Noto Serif TC', serif;
             color: var(--text-main);
             -webkit-tap-highlight-color: transparent;
@@ -25,26 +25,30 @@
 
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .glass-nav { 
-            background: rgba(255, 255, 255, 0.7); 
+            background: rgba(255, 255, 255, 0.8); 
             backdrop-filter: blur(15px); 
             border-top: 1px solid rgba(0,0,0,0.05);
         }
 
         .card { 
             background: white; 
-            border-radius: 24px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
+            border-radius: 28px; 
+            box-shadow: 0 4px 25px rgba(0,0,0,0.03);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        /* 導航按鈕美化 */
         .nav-active { color: var(--japandi-red); font-weight: 700; }
-        .nav-active i { transform: translateY(-3px); color: var(--japandi-red); }
+        
+        /* 路線圖預覽裝飾 */
+        .map-preview-container::after {
+            content: "TAP TO ZOOM";
+            position: absolute; bottom: 10px; right: 10px;
+            background: rgba(0,0,0,0.5); color: white;
+            padding: 4px 8px; border-radius: 6px; font-size: 8px; letter-spacing: 1px;
+        }
     </style>
 </head>
 <body class="pb-32">
@@ -53,79 +57,92 @@
         <div class="flex justify-between items-start">
             <div>
                 <h1 class="text-3xl font-light tracking-tight text-gray-800">Kansai <span class="font-serif italic text-[#A64B2A]">2026</span></h1>
-                <p class="text-xs tracking-widest text-gray-400 mt-1 uppercase">Family Journey</p>
+                <p class="text-[10px] tracking-[0.2em] text-gray-400 mt-1 uppercase font-semibold">Family Journey · Japan</p>
             </div>
             <div id="realtime-weather" class="text-right">
                 <div class="flex items-center justify-end gap-2">
                     <span id="weather-icon" class="text-2xl">--</span>
                     <span id="weather-temp" class="text-2xl font-light">--°C</span>
                 </div>
-                <p id="weather-desc" class="text-[10px] text-gray-400 font-medium">Updating...</p>
+                <p id="weather-desc" class="text-[9px] text-gray-400 font-medium tracking-tighter italic">Updating Local Data...</p>
             </div>
         </div>
     </header>
 
     <main id="tab-itinerary" class="tab-content active px-6">
-        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-8 py-2" id="date-slider"></div>
+        <div class="flex gap-5 overflow-x-auto no-scrollbar mb-10 py-2 border-b border-gray-100" id="date-slider"></div>
 
-        <div id="itinerary-list" class="space-y-8"></div>
+        <div id="itinerary-list" class="space-y-8 relative">
+            </div>
     </main>
 
     <section id="tab-tools" class="tab-content px-6 space-y-6">
-        <div class="card p-6">
+        <div class="card p-6 border border-gray-50">
             <h3 class="font-serif text-lg mb-4 border-l-4 border-[#A64B2A] pl-3">地鐵與巴士路線圖</h3>
+            <p class="text-[10px] text-gray-400 mb-4 font-light italic">提供京都/大阪高清路線圖，建議點擊開啟原圖保存。</p>
             <div class="space-y-4">
-                <div class="rounded-2xl overflow-hidden shadow-inner bg-gray-50">
-                    <img src="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" class="w-full h-48 object-cover opacity-80" id="route-map-preview">
+                <div class="map-preview-container relative rounded-2xl overflow-hidden shadow-inner bg-gray-100">
+                    <img src="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" class="w-full h-48 object-cover opacity-90" id="route-map-preview">
                 </div>
-                <div class="flex flex-col gap-2">
-                    <a href="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" target="_blank" class="w-full py-4 rounded-2xl bg-gray-800 text-white text-center text-sm font-light tracking-widest">
+                <div class="flex flex-col gap-3">
+                    <a href="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" target="_blank" class="w-full py-4 rounded-2xl bg-gray-800 text-white text-center text-xs font-semibold tracking-[0.2em] shadow-lg active:scale-95 transition-all">
                         OPEN KYOTO MAP (HD)
                     </a>
-                    <a href="https://subway.osakametro.co.jp/guide/library/rosenzu/20240323_osakametro_rosenzu.pdf" target="_blank" class="w-full py-4 rounded-2xl border border-gray-200 text-center text-sm font-light">
+                    <a href="https://subway.osakametro.co.jp/guide/library/rosenzu/20240323_osakametro_rosenzu.pdf" target="_blank" class="w-full py-4 rounded-2xl border border-gray-200 text-center text-xs font-medium text-gray-600 active:bg-gray-50 transition-all">
                         OSAKA METRO PDF
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="card p-6 space-y-4">
-            <h3 class="font-serif text-lg border-l-4 border-gray-300 pl-3">Emergency</h3>
-            <div class="text-sm space-y-3">
-                <a href="tel:110" class="flex justify-between items-center text-gray-600"><span>警察局報案</span><span class="font-mono">110</span></a>
-                <a href="tel:119" class="flex justify-between items-center text-gray-600"><span>急救消防</span><span class="font-mono">119</span></a>
-                <div class="pt-2 border-t flex justify-between"><span>長榮航空 KIX</span><span>072-456-5386</span></div>
+        <div class="card p-6 bg-[#A64B2A]/5">
+            <h3 class="font-serif text-lg border-l-4 border-gray-300 pl-3 mb-4">緊急聯絡 / Emergency</h3>
+            <div class="text-sm space-y-4 font-light">
+                <a href="tel:110" class="flex justify-between items-center text-gray-700"><span>警察局 (Police)</span><span class="font-mono font-bold tracking-widest">110</span></a>
+                <a href="tel:119" class="flex justify-between items-center text-gray-700"><span>急救/火警</span><span class="font-mono font-bold tracking-widest">119</span></a>
+                <div class="pt-2 border-t border-gray-200 flex justify-between text-gray-500"><span>長榮航空 KIX</span><span>072-456-5386</span></div>
             </div>
         </div>
     </section>
 
     <nav class="fixed bottom-0 left-0 right-0 h-24 glass-nav flex justify-around items-center px-10 z-50">
         <button onclick="changeTab('itinerary', this)" class="nav-btn nav-active flex flex-col items-center gap-1 transition-all">
-            <i class="fa-solid fa-compass text-xl"></i><span class="text-[9px] uppercase tracking-tighter">Plan</span>
+            <i class="fa-solid fa-compass text-xl"></i><span class="text-[9px] uppercase tracking-widest font-bold">Plan</span>
         </button>
         <button onclick="changeTab('tools', this)" class="nav-btn flex flex-col items-center gap-1 text-gray-300 transition-all">
-            <i class="fa-solid fa-map text-xl"></i><span class="text-[9px] uppercase tracking-tighter">Map</span>
+            <i class="fa-solid fa-map text-xl"></i><span class="text-[9px] uppercase tracking-widest font-bold">Map</span>
         </button>
     </nav>
 
     <script>
+        // --- 修正後的行程資料 (2026/05/14 星期四) ---
         const tripData = [
-            { day: "D1", date: "05/14", week: "Wed", city: "Kyoto", activities: [
+            { day: "D1", date: "05/14", week: "Thu", city: "Kyoto", activities: [
                 { time: "07:05", type: "Flight", name: "高雄小港機場 (KHH)", note: "搭乘 **BR 182**。預計抵達 KIX 11:10。", icon: "fa-plane" },
-                { time: "15:00", type: "Stay", name: "京都八條都酒店", note: "**預約號: JP827**。京都車站正對面。", icon: "fa-hotel", map: "https://maps.app.goo.gl/3AByLg1f5S3J9S3J" },
-                { time: "18:00", type: "Food", name: "弘 燒肉", note: "必吃：**極上牛舌**、**厚切牛排**。已訂位。", icon: "fa-utensils", map: "https://maps.app.goo.gl/xxx" }
+                { time: "15:00", type: "Stay", name: "京都八條都酒店", note: "**預約代號: MY92837**。京都車站正對面。", icon: "fa-hotel", map: "https://maps.google.com/?q=Kyoto+Miyako+Hotel+New+Miyako" },
+                { time: "18:00", type: "Food", name: "弘 燒肉", note: "必吃：**極上牛舌**、**厚切牛排**。已訂位。", icon: "fa-utensils", map: "https://maps.google.com/?q=Yakiniku+Hiro+Kyoto+Station" }
             ]},
-            { day: "D2", date: "05/15", week: "Thu", city: "Kyoto/Osaka", activities: [
-                { time: "10:00", type: "Spot", name: "清水寺", note: "💡 導遊故事：全木造舞台無鐵釘。必買：**七味粉**。", icon: "fa-torii-gate", map: "https://maps.app.goo.gl/yyy" },
-                { time: "19:00", type: "Stay", name: "艾思利德酒店 難波南III", note: "大阪連住四晚起始點。", icon: "fa-key" }
+            { day: "D2", date: "05/15", week: "Fri", city: "Kyoto/Osaka", activities: [
+                { time: "09:30", type: "Spot", name: "清水寺", note: "💡 導遊故事：全木造舞台無鐵釘。必買：**七味粉**。", icon: "fa-torii-gate", map: "https://maps.google.com/?q=Kiyomizu-dera" },
+                { time: "19:00", type: "Stay", name: "艾思利德酒店 難波南III", note: "大阪連住四晚。鄰近新今宮/動物園前站。", icon: "fa-key" }
             ]},
-            // ... 後續天數可依此類推
+            { day: "D3", date: "05/16", week: "Sat", city: "Kyoto", activities: [
+                { time: "09:00", type: "Spot", name: "天橋立 / 伊根", note: "海之京都。搭乘遊船餵海鷗。", icon: "fa-ship" }
+            ]},
+            { day: "D4", date: "05/17", week: "Sun", city: "Osaka", activities: [
+                { time: "10:00", type: "Food", name: "黑門市場", note: "必吃：**海鮮串燒**、**神戶牛**。", icon: "fa-fish" }
+            ]},
+            { day: "D5", date: "05/18", week: "Mon", city: "Kobe", activities: [
+                { time: "11:00", type: "Spot", name: "神戶動物王國", note: "與水豚近距離接觸。", icon: "fa-paw" }
+            ]},
+            { day: "D6", date: "05/19", week: "Tue", city: "Return", activities: [
+                { time: "13:00", type: "Shop", name: "臨空城 Outlet", note: "最後採買。準備前往關西機場。", icon: "fa-bag-shopping" }
+            ]}
         ];
 
-        // --- 天氣預報系統 (API 串接) ---
+        // --- 即時天氣 API (Open-Meteo) ---
         async function fetchWeather() {
             try {
-                // 大阪座標: 34.69, 135.50
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.69&longitude=135.50&current_weather=true');
                 const data = await res.json();
                 const temp = Math.round(data.current_weather.temperature);
@@ -133,28 +150,27 @@
                 
                 document.getElementById('weather-temp').innerText = `${temp}°C`;
                 const weatherMap = {
-                    0: ["☀️", "Clear Sky"],
-                    1: ["🌤️", "Mainly Clear"],
-                    2: ["⛅", "Partly Cloudy"],
-                    3: ["☁️", "Overcast"],
-                    61: ["🌧️", "Rainy"],
+                    0: ["☀️", "Clear Sky"], 1: ["🌤️", "Mainly Clear"], 
+                    2: ["⛅", "Partly Cloudy"], 3: ["☁️", "Overcast"],
+                    61: ["🌧️", "Rainy"], 80: ["🌦️", "Showers"]
                 };
                 const [emoji, desc] = weatherMap[code] || ["☀️", "Sunny"];
                 document.getElementById('weather-icon').innerText = emoji;
                 document.getElementById('weather-desc').innerText = `Osaka: ${desc}`;
             } catch (e) {
-                document.getElementById('weather-desc').innerText = "Weather unavailable";
+                document.getElementById('weather-desc').innerText = "Weather Temp Offline";
             }
         }
 
-        // --- 核心渲染 ---
+        // --- 核心渲染系統 ---
         function changeTab(tabId, el) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active', 'text-gray-300'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.add('text-gray-300'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
             el.classList.add('nav-active');
             el.classList.remove('text-gray-300');
+            window.scrollTo(0, 0);
         }
 
         function renderDay(idx) {
@@ -163,26 +179,25 @@
             list.innerHTML = day.activities.map(act => `
                 <div class="flex gap-6 group">
                     <div class="flex flex-col items-center">
-                        <span class="text-[10px] font-mono font-bold text-gray-300">${act.time}</span>
+                        <span class="text-[9px] font-mono font-black text-gray-300">${act.time}</span>
                         <div class="w-[1px] h-full bg-gray-100 my-2 relative">
-                            <div class="absolute top-0 -left-[2px] w-1 h-1 rounded-full bg-[#A64B2A]"></div>
+                            <div class="absolute top-0 -left-[2px] w-1.5 h-1.5 rounded-full bg-[#A64B2A] shadow-sm"></div>
                         </div>
                     </div>
-                    <div class="flex-1 pb-8">
+                    <div class="flex-1 pb-10">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="text-md font-semibold text-gray-800">${act.name}</h4>
-                            <i class="fa-solid ${act.icon} text-gray-200 text-sm"></i>
+                            <h4 class="text-sm font-bold text-gray-800 tracking-tight">${act.name}</h4>
+                            <i class="fa-solid ${act.icon} text-gray-100 text-sm"></i>
                         </div>
-                        <p class="text-xs text-gray-400 font-light leading-relaxed mb-4">${formatNote(act.note)}</p>
+                        <p class="text-[11px] text-gray-400 font-light leading-relaxed mb-4">${formatNote(act.note)}</p>
                         ${act.map ? `
-                        <a href="${act.map}" target="_blank" class="inline-flex items-center gap-2 bg-[#F2F2F2] px-6 py-3 rounded-full text-[10px] font-semibold tracking-widest text-gray-700 uppercase transition-all active:bg-gray-200">
-                            <i class="fa-solid fa-location-arrow text-[8px]"></i> Open in Maps
+                        <a href="${act.map}" target="_blank" class="inline-flex items-center gap-2 bg-[#F2F2F2] px-6 py-2.5 rounded-full text-[9px] font-bold tracking-widest text-gray-600 uppercase transition-all active:scale-90">
+                            <i class="fa-solid fa-location-arrow text-[8px]"></i> Google Maps
                         </a>` : ''}
                     </div>
                 </div>
             `).join('');
             
-            // 更新日期按鈕樣式
             document.querySelectorAll('.day-btn').forEach((b, i) => {
                 b.classList.toggle('text-[#A64B2A]', i === idx);
                 b.classList.toggle('border-b-2', i === idx);
@@ -193,16 +208,16 @@
 
         function formatNote(note) {
             return note
-                .replace(/\*\*(.*?)\*\*/g, '<b class="text-[#A64B2A] font-semibold">$1</b>')
-                .replace(/必吃：/g, '<span class="text-[#8E9775] font-bold">🍴 必吃</span> ')
-                .replace(/💡 導遊故事：/g, '<span class="italic text-gray-500">📜 </span>');
+                .replace(/\*\*(.*?)\*\*/g, '<b class="text-[#A64B2A] font-bold">$1</b>')
+                .replace(/必吃：/g, '<span class="text-[#8E9775] font-bold underline decoration-dotted">🍴 必吃</span> ')
+                .replace(/💡 導遊故事：/g, '<span class="italic text-gray-400">📜 </span>');
         }
 
         function init() {
             const slider = document.getElementById('date-slider');
             slider.innerHTML = tripData.map((d, i) => `
-                <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 pb-2 text-sm font-semibold tracking-tighter text-gray-300 transition-all">
-                    ${d.day} <span class="text-[10px] font-light ml-1">${d.date}</span>
+                <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 pb-3 text-xs font-bold tracking-tighter text-gray-300 transition-all">
+                    ${d.day} <span class="text-[9px] font-light ml-0.5">${d.week}</span>
                 </button>
             `).join('');
             renderDay(0);
