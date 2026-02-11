@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&family=Noto+Sans+TC:wght@300;500;700&family=Playfair+Display:ital,wght@1,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&family=Noto+Sans+TC:wght@300;500;700&display=swap');
         :root { --navy: #1A2238; --gold: #C4A484; --paper: #FDFCFB; }
         body { background-color: var(--paper); font-family: 'Noto Sans TC', sans-serif; color: var(--navy); }
         .date-font { font-family: 'Roboto', sans-serif; letter-spacing: -0.02em; }
@@ -15,10 +15,9 @@
         .tab-content.active { display: block; animation: luxFade 0.4s ease-out; }
         @keyframes luxFade { from { opacity: 0; } to { opacity: 1; } }
         
-        /* 燙金登機證視覺 */
         .boarding-pass { background: white; border-radius: 24px; position: relative; border: 1px solid rgba(196,164,132,0.2); margin-bottom: 24px; overflow: hidden; box-shadow: 0 15px 35px rgba(26,34,56,0.08); }
         .pass-header { background: var(--navy); padding: 14px 24px; color: var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .pass-body { padding: 24px; position: relative; background: linear-gradient(to bottom, #ffffff, #fafafa); }
+        .pass-body { padding: 24px; position: relative; }
         .pass-body::before, .pass-body::after { content: ''; position: absolute; width: 30px; height: 30px; background: var(--paper); border-radius: 50%; top: 72%; transform: translateY(-50%); z-index: 10; border: 1px solid rgba(196,164,132,0.1); }
         .pass-body::before { left: -16px; } .pass-body::after { right: -16px; }
         .dash-line { border-top: 1.5px dashed var(--gold); opacity: 0.3; margin: 18px 0; }
@@ -26,8 +25,7 @@
         .lux-card { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(26,34,56,0.05); border: 1px solid rgba(196,164,132,0.15); overflow: hidden; }
         .glass-nav { background: rgba(26, 34, 56, 0.98); backdrop-filter: blur(15px); }
         .nav-active { color: var(--gold) !important; }
-        .nav-btn-map { background: var(--navy); color: var(--gold); padding: 6px 14px; border-radius: 14px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px; transition: transform 0.2s; }
-        .nav-btn-map:active { transform: scale(0.9); }
+        .nav-btn-map { background: var(--navy); color: var(--gold); padding: 6px 14px; border-radius: 14px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -36,8 +34,8 @@
     <header class="px-8 pt-12 pb-16 bg-[#1A2238] text-white rounded-b-[45px] shadow-2xl">
         <div class="flex justify-between items-end">
             <div>
-                <h1 class="font-serif italic text-3xl text-[#C4A484] tracking-tight">Kansai Elite</h1>
-                <p class="text-[10px] tracking-[0.4em] opacity-50 uppercase font-bold mt-1">Private Itinerary 2026</p>
+                <h1 class="font-serif italic text-3xl text-[#C4A484]">Kansai Elite</h1>
+                <p class="text-[10px] tracking-[0.4em] opacity-50 uppercase font-bold mt-1">May 2026 Journey</p>
             </div>
             <div class="text-right">
                 <span id="weather-temp" class="text-3xl font-black date-font text-[#C4A484]">--°C</span>
@@ -46,70 +44,60 @@
     </header>
 
     <main id="tab-bookings" class="tab-content active px-6 -mt-10">
-        
         <div class="boarding-pass">
             <div class="pass-header">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-plane-up text-[10px]"></i><span class="text-[10px] font-black uppercase tracking-[0.2em]">Departure Flight</span></div>
-                <span class="date-font text-xs font-bold uppercase">BR 182 / Term I</span>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-plane-up"></i><span class="text-[10px] font-black uppercase tracking-widest">Depart Flight</span></div>
+                <span class="date-font text-xs font-bold uppercase">BR 182 / Term 1</span>
             </div>
             <div class="pass-body">
-                <div class="flex justify-between items-center">
-                    <div class="text-left"><h2 class="date-font text-4xl font-black text-[#1A2238]">KHH</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">Depart 07:05</p></div>
+                <div class="flex justify-between items-center text-[#1A2238]">
+                    <div class="text-left"><h2 class="date-font text-4xl font-black">KHH</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">小港 Term 1</p></div>
                     <div class="flex-1 flex flex-col items-center px-4"><i class="fa-solid fa-plane text-gold mb-1"></i><div class="w-full border-t border-gold/30"></div></div>
-                    <div class="text-right"><h2 class="date-font text-4xl font-black text-[#1A2238]">KIX</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">Arrive 11:10</p></div>
+                    <div class="text-right"><h2 class="date-font text-4xl font-black">KIX</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">關西 Term 1</p></div>
                 </div>
                 <div class="dash-line"></div>
                 <div class="grid grid-cols-3 gap-2 text-center">
-                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Date</p><p class="text-[12px] font-black date-font">MAY 14</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Boarding</p><p class="text-[12px] font-black date-font">06:35</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Term / Gate</p><p class="text-[12px] font-black date-font text-gold">I / TBA</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Time</p><p class="text-[12px] font-black date-font">07:05</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Arrive</p><p class="text-[12px] font-black date-font">11:10</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Gate</p><p class="text-[12px] font-black date-font text-gold">TBA</p></div>
                 </div>
             </div>
         </div>
 
         <div class="boarding-pass">
             <div class="pass-header">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-plane-up fa-rotate-180 text-[10px]"></i><span class="text-[10px] font-black uppercase tracking-[0.2em]">Return Flight</span></div>
-                <span class="date-font text-xs font-bold uppercase">BR 147 / Term I</span>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-plane-up fa-rotate-180"></i><span class="text-[10px] font-black uppercase tracking-widest">Return Flight</span></div>
+                <span class="date-font text-xs font-bold uppercase">BR 147 / Term 1</span>
             </div>
             <div class="pass-body">
-                <div class="flex justify-between items-center">
-                    <div class="text-left"><h2 class="date-font text-4xl font-black text-[#1A2238]">KIX</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">Depart 20:35</p></div>
+                <div class="flex justify-between items-center text-[#1A2238]">
+                    <div class="text-left"><h2 class="date-font text-4xl font-black">KIX</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">關西 Term 1</p></div>
                     <div class="flex-1 flex flex-col items-center px-4"><i class="fa-solid fa-plane fa-rotate-180 text-gold mb-1"></i><div class="w-full border-t border-gold/30"></div></div>
-                    <div class="text-right"><h2 class="date-font text-4xl font-black text-[#1A2238]">KHH</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">Arrive 22:55</p></div>
+                    <div class="text-right"><h2 class="date-font text-4xl font-black">KHH</h2><p class="text-[10px] opacity-40 font-bold uppercase italic">小港 Term 1</p></div>
                 </div>
                 <div class="dash-line"></div>
                 <div class="grid grid-cols-3 gap-2 text-center">
-                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Date</p><p class="text-[12px] font-black date-font">MAY 19</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Boarding</p><p class="text-[12px] font-black date-font">20:00</p></div>
-                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Term / Gate</p><p class="text-[12px] font-black date-font text-gold">I / TBA</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Time</p><p class="text-[12px] font-black date-font">20:35</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Arrive</p><p class="text-[12px] font-black date-font">22:55</p></div>
+                    <div><p class="text-[8px] uppercase text-gray-400 font-black">Gate</p><p class="text-[12px] font-black date-font text-gold">TBA</p></div>
                 </div>
             </div>
         </div>
 
-        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C4A484] mb-4 mt-8 ml-2">Quick Access</h3>
-        <div class="grid grid-cols-2 gap-3 mb-8">
-            <button onclick="window.open('https://maps.app.goo.gl/96HghbshW2QnS9X39')" class="flex items-center justify-center gap-2 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-[11px] font-bold">
-                <i class="fa-solid fa-plane-arrival text-blue-500"></i>關西機場 T1
-            </button>
-            <button onclick="window.open('https://maps.app.goo.gl/YfW8P6R1D7s17m8Q8')" class="flex items-center justify-center gap-2 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm text-[11px] font-bold">
-                <i class="fa-solid fa-train text-red-500"></i>京都車站
-            </button>
-        </div>
-
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C4A484] mb-4 mt-8 ml-2">Accommodations</h3>
         <div class="lux-card mb-8">
             <div class="h-[180px] overflow-hidden"><img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1000" class="w-full h-full object-cover"></div>
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                     <h4 class="font-bold text-xl text-[#1A2238]">京都八條都酒店</h4>
-                    <button onclick="window.open('https://maps.app.goo.gl/vQ1TzR6X8hLp5p8J9')" class="nav-btn-map"><i class="fa-solid fa-location-arrow"></i>Nav</button>
+                    <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=京都八條都酒店')" class="nav-btn-map"><i class="fa-solid fa-location-arrow"></i>Map</button>
                 </div>
                 <div class="space-y-3 text-[12px]">
                     <p class="flex items-start gap-3"><i class="fa-solid fa-location-dot mt-1 text-gold"></i><span>京都市南區西九條院町17</span></p>
                     <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-gold"></i><span>+81 75-661-7111</span></p>
                     <div class="grid grid-cols-2 gap-4 pt-4 mt-2 border-t border-gray-100">
-                        <div><span class="block text-[9px] text-gray-400 font-black">CHECK IN</span><span class="font-black text-md date-font">14:00</span></div>
-                        <div><span class="block text-[9px] text-gray-400 font-black">CHECK OUT</span><span class="font-black text-md date-font">11:00</span></div>
+                        <div><span class="block text-[9px] text-gray-400 font-black uppercase">Check In</span><span class="font-black text-md date-font">14:00</span></div>
+                        <div><span class="block text-[9px] text-gray-400 font-black uppercase">Check Out</span><span class="font-black text-md date-font">11:00</span></div>
                     </div>
                 </div>
             </div>
@@ -120,14 +108,14 @@
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                     <h4 class="font-bold text-xl text-[#1A2238]">艾思利德酒店 難波南III</h4>
-                    <button onclick="window.open('https://maps.app.goo.gl/wP7D8m2T3YVp6v8Y8')" class="nav-btn-map"><i class="fa-solid fa-location-arrow"></i>Nav</button>
+                    <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=大阪府大阪市浪速區惠美須西2-8-6')" class="nav-btn-map"><i class="fa-solid fa-location-arrow"></i>Map</button>
                 </div>
                 <div class="space-y-3 text-[12px]">
                     <p class="flex items-start gap-3"><i class="fa-solid fa-location-dot mt-1 text-gold"></i><span>大阪府大阪市浪速區惠美須西2-8-6</span></p>
-                    <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-gold"></i><span>06-6632-8727</span></p>
+                    <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-gold"></i><span>+81-6-6632-8727</span></p>
                     <div class="grid grid-cols-2 gap-4 pt-4 mt-2 border-t border-gray-100">
-                        <div><span class="block text-[9px] text-gray-400 font-black">CHECK IN</span><span class="font-black text-md date-font">15:00</span></div>
-                        <div><span class="block text-[9px] text-gray-400 font-black">CHECK OUT</span><span class="font-black text-md date-font">10:00</span></div>
+                        <div><span class="block text-[9px] text-gray-400 font-black uppercase">Check In</span><span class="font-black text-md date-font">15:00</span></div>
+                        <div><span class="block text-[9px] text-gray-400 font-black uppercase">Check Out</span><span class="font-black text-md date-font">10:00</span></div>
                     </div>
                 </div>
             </div>
@@ -135,14 +123,10 @@
     </main>
 
     <section id="tab-transport" class="tab-content px-6 -mt-10">
-        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C4A484] mb-6 ml-2">Transit Maps (PDF)</h3>
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#C4A484] mb-6 ml-2">Transit Maps</h3>
         <div class="space-y-4">
             <a href="https://subway.osakametro.co.jp/guide/library/rosenzu/20240323_osakametro_rosenzu.pdf" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex items-center gap-4 text-blue-600"><i class="fa-solid fa-subway text-xl"></i><span class="font-bold text-gray-800">大阪地下鐵路線圖</span></div>
-                <i class="fa-solid fa-chevron-right text-gray-300"></i>
-            </a>
-            <a href="https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000008/8932/04rosenzu.png" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-                <div class="flex items-center gap-4 text-green-600"><i class="fa-solid fa-bus text-xl"></i><span class="font-bold text-gray-800">京都巴士全圖</span></div>
                 <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </a>
         </div>
@@ -153,7 +137,7 @@
         <div id="itinerary-list" class="space-y-8"></div>
     </section>
 
-    <nav class="fixed bottom-0 left-0 right-0 h-24 glass-nav flex justify-around items-center px-6 z-50 rounded-t-[35px] border-t border-white/10">
+    <nav class="fixed bottom-0 left-0 right-0 h-24 glass-nav flex justify-around items-center px-6 z-50 rounded-t-[35px]">
         <button onclick="changeTab('bookings', this)" class="nav-btn nav-active flex flex-col items-center gap-1 text-white/40"><i class="fa-solid fa-passport text-xl"></i><span class="text-[9px] font-black uppercase">Books</span></button>
         <button onclick="changeTab('transport', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40"><i class="fa-solid fa-map-location-dot text-xl"></i><span class="text-[9px] font-black uppercase">Map</span></button>
         <button onclick="changeTab('itinerary', this)" class="nav-btn flex flex-col items-center gap-1 text-white/40"><i class="fa-solid fa-calendar-days text-xl"></i><span class="text-[9px] font-black uppercase">Plan</span></button>
@@ -162,45 +146,42 @@
 <script>
     const tripData = [
         { day: "01", date: "05/14", week: "Thu", activities: [
-            { time: "07:05", name: "高雄小港機場 (KHH)", note: "長榮航空 **BR 182** 啟程。", icon: "fa-plane-departure" },
-            { time: "11:10", name: "關西國際機場 T1 (KIX)", note: "抵達辦理入境。領取行李後前往二樓搭乘 HARUKA。", icon: "fa-plane-arrival" },
-            { time: "14:00", name: "京都車站", note: "飯店寄放行李，開啟京都探索之旅。", icon: "fa-train" },
-            { time: "15:30", name: "祇園・花見小路", note: "感受古都韻味，幸運的話可見藝妓身影。", icon: "fa-camera-retro" },
-            { time: "18:00", name: "四條河原町", note: "晚餐與夜間漫步。", icon: "fa-utensils" },
-            { time: "STAY", name: "京都八條都酒店", note: "入住休息 (14:00後可辦理)。", icon: "fa-hotel" }
+            { time: "07:05", name: "高雄小港機場 (KHH)", note: "起飛。航廈 Terminal 1。", icon: "fa-plane-departure" },
+            { time: "11:10", name: "關西國際機場 (KIX)", note: "抵達第一航廈。領行李後前往二樓搭乘 HARUKA。", icon: "fa-plane-arrival" },
+            { time: "15:30", name: "祇園・花見小路", note: "漫步京都傳統街道。", icon: "fa-camera-retro" },
+            { time: "STAY", name: "京都八條都酒店", note: "辦理入住休息。", icon: "fa-hotel" }
         ]},
         { day: "02", date: "05/15", week: "Fri", activities: [
-            { time: "09:00", name: "璃光和服 清水寺店", note: "換上美美的和服，今日為京都攝影日。", icon: "fa-person-dress" },
-            { time: "10:30", name: "清水寺", note: "參拜清水舞台與音羽之瀧。", icon: "fa-torii-gate" },
-            { time: "13:30", name: "錦市場", note: "品嚐玉子燒、炸串及京都小點心。", icon: "fa-fish" },
-            { time: "15:30", name: "金閣寺", note: "欣賞倒映在鏡湖池上的燦爛金箔舍利殿。", icon: "fa-sun" },
-            { time: "STAY", name: "艾思利德酒店 難波南III", note: "移動至大阪辦理入住。", icon: "fa-key" }
+            { time: "09:00", name: "璃光和服 清水寺店", note: "預約換裝體驗。", icon: "fa-person-dress" },
+            { time: "10:30", name: "清水寺", note: "參拜世界遺產。", icon: "fa-torii-gate" },
+            { time: "13:30", name: "錦市場", note: "品嚐在地美食。", icon: "fa-fish" },
+            { time: "15:30", name: "金閣寺", note: "欣賞舍利殿。", icon: "fa-sun" },
+            { time: "STAY", name: "艾思利德酒店 難波南III", note: "移動至大阪入住。", icon: "fa-key" }
         ]},
         { day: "03", date: "05/16", week: "Sat", activities: [
-            { time: "08:30", name: "KKDay 專車集合點", note: "海之京都一日遊：伊根舟屋、天橋立。", icon: "fa-bus" },
-            { time: "11:00", name: "伊根灣舟屋", note: "搭乘觀光船，在海上看獨特的舟屋景觀。", icon: "fa-ship" },
-            { time: "13:30", name: "天橋立展望台", note: "倒著看「昇龍觀」一覽日本三景。", icon: "fa-mountain" },
-            { time: "16:00", name: "美山合掌村", note: "在靜謐的茅草屋部落散策。", icon: "fa-house" },
-            { time: "STAY", name: "艾思利德酒店 難波南III", note: "飯店休息。", icon: "fa-hotel" }
+            { time: "07:00", name: "KKDAY 專車集合", note: "準時抵達指定地點集合啟程。", icon: "fa-bus" },
+            { time: "10:00", name: "伊根灣舟屋", note: "搭乘觀光船看獨特的舟屋景觀。", icon: "fa-ship" },
+            { time: "11:00", name: "天橋立展望台", note: "纜車登頂眺望美景。", icon: "fa-mountain" },
+            { time: "14:45", name: "美山茅草屋村落", note: "探訪隱世合掌屋部落。", icon: "fa-house" },
+            { time: "18:00", name: "心齋橋 & 道頓堀", note: "藥妝採購與格力高跑跑人打卡。", icon: "fa-lightbulb" },
+            { time: "STAY", name: "艾思利德酒店 難波南III", note: "返回飯店休息。", icon: "fa-hotel" }
         ]},
         { day: "04", date: "05/17", week: "Sun", activities: [
-            { time: "10:00", name: "黑門市場", note: "享受生蠔、和牛與時令水果。", icon: "fa-utensils" },
-            { time: "13:00", name: "天神橋筋商店街", note: "漫步全日本最長商店街，體驗大阪庶民生活。", icon: "fa-shopping-bag" },
-            { time: "15:30", name: "通天閣", note: "大阪地標，看著新世界的夕陽。", icon: "fa-tower-observation" },
-            { time: "17:00", name: "心齋橋・道頓堀", note: "藥妝採購與格力高跑跑人打卡。", icon: "fa-lightbulb" },
+            { time: "10:00", name: "黑門市場", note: "享用生猛海鮮與和牛。", icon: "fa-utensils" },
+            { time: "15:30", name: "通天閣", note: "俯瞰大阪經典風情。", icon: "fa-tower-observation" },
+            { time: "16:30", name: "新世界本通商店街", note: "昭和風情散步與美食。", icon: "fa-shop" },
             { time: "STAY", name: "艾思利德酒店 難波南III", note: "飯店休息。", icon: "fa-hotel" }
         ]},
         { day: "05", date: "05/18", week: "Mon", activities: [
-            { time: "10:30", name: "神戶動物王國", note: "療癒系景點，近距離接觸可愛動物。", icon: "fa-paw" },
+            { time: "10:45", name: "神戶動物王國", note: "今日行程由此開始，與可愛動物互動。", icon: "fa-paw" },
             { time: "13:30", name: "神戶南京町", note: "熱鬧的中華街散策。", icon: "fa-archway" },
-            { time: "15:30", name: "神戶遊覽船", note: "搭船巡禮神戶港灣景緻。", icon: "fa-anchor" },
-            { time: "18:00", name: "神戶臨海樂園", note: "在港口夜景下享受悠閒晚餐。", icon: "fa-image" },
+            { time: "18:00", name: "神戶臨海樂園", note: "欣赏港灣夕陽與夜景。", icon: "fa-image" },
             { time: "STAY", name: "艾思利德酒店 難波南III", note: "返回大阪。", icon: "fa-hotel" }
         ]},
         { day: "06", date: "05/19", week: "Tue", activities: [
-            { time: "10:00", name: "難波八阪神社", note: "在巨型獅子殿前祈求好運。", icon: "fa-om" },
-            { time: "13:00", name: "臨空城 Outlet", note: "上機前最後大採購與午餐。", icon: "fa-bag-shopping" },
-            { time: "20:35", name: "關西國際機場 T1", note: "長榮航空 **BR 147** 告別關西返抵高雄。", icon: "fa-plane-departure" }
+            { time: "10:00", name: "難波八阪神社", note: "必看巨大獅子頭殿。", icon: "fa-om" },
+            { time: "13:00", name: "臨空城 Outlet", note: "最後一站大採購。", icon: "fa-bag-shopping" },
+            { time: "20:35", name: "關西國際機場 T1", note: "BR 147 準備返台。", icon: "fa-plane-departure" }
         ]}
     ];
 
@@ -219,11 +200,11 @@
                 <div class="flex justify-between items-center mb-2">
                     <span class="date-font text-[13px] font-black text-gold uppercase">${act.time}</span>
                     <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.name)}')" class="nav-btn-map">
-                        <i class="fa-solid fa-location-arrow"></i>Nav
+                        <i class="fa-solid fa-location-arrow"></i>Map
                     </button>
                 </div>
                 <h4 class="text-md font-bold text-[#1A2238]">${act.name}</h4>
-                <p class="text-[11px] text-gray-400 mt-2 leading-relaxed">${act.note.replace(/\*\*(.*?)\*\*/g, '<b class="text-gray-600">$1</b>')}</p>
+                <p class="text-[11px] text-gray-400 mt-2 leading-relaxed">${act.note}</p>
             </div>
         `).join('');
         document.querySelectorAll('.day-btn').forEach((b, i) => {
@@ -233,24 +214,15 @@
         });
     }
 
-    async function fetchWeather() {
-        try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.69&longitude=135.50&current_weather=true');
-            const data = await res.json();
-            document.getElementById('weather-temp').innerText = `${Math.round(data.current_weather.temperature)}°C`;
-        } catch (e) { }
-    }
-
     window.onload = () => {
         const slider = document.getElementById('date-slider');
         slider.innerHTML = tripData.map((d, i) => `
-            <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 w-14 h-18 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 bg-white shadow-sm text-gray-400 border border-gray-100">
+            <button onclick="renderDay(${i})" class="day-btn flex-shrink-0 w-14 h-18 rounded-2xl flex flex-col items-center justify-center transition-all bg-white shadow-sm text-gray-400 border border-gray-100">
                 <span class="date-font text-[16px] font-black leading-none">${d.day}</span>
-                <span class="text-[8px] mt-1 font-bold uppercase tracking-wider">${d.week}</span>
+                <span class="text-[8px] mt-1 font-bold uppercase">${d.week}</span>
             </button>
         `).join('');
         renderDay(0);
-        fetchWeather();
     };
 </script>
 </body>
